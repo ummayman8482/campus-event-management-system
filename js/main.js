@@ -5,6 +5,7 @@
    Handles: Navigation, Form Validation, Event Filtering,
    Admin Dashboard Tabs, Table Search, Toast Notifications,
    Scroll Animations, and Page-Specific Logic.
+   All form submissions and admin data load from Firebase Firestore.
    ============================================================ */
 
 (function () {
@@ -28,14 +29,12 @@
 
         container.appendChild(toast);
 
-        /* Close button listener */
         toast.querySelector('.toast-close').addEventListener('click', function () {
             toast.style.opacity = '0';
             toast.style.transform = 'translateX(100%)';
             setTimeout(function () { toast.remove(); }, 300);
         });
 
-        /* Auto-dismiss after 5 seconds */
         setTimeout(function () {
             if (toast.parentNode) {
                 toast.style.opacity = '0';
@@ -75,7 +74,6 @@
     if (hamburger) hamburger.addEventListener('click', toggleMobileNav);
     if (mobileOverlay) mobileOverlay.addEventListener('click', closeMobileNav);
 
-    /* Close mobile nav on link click */
     document.querySelectorAll('.nav-link').forEach(function (link) {
         link.addEventListener('click', closeMobileNav);
     });
@@ -96,7 +94,6 @@
 
         animatedElements.forEach(function (el) { observer.observe(el); });
     } else {
-        /* Fallback: show everything immediately */
         animatedElements.forEach(function (el) { el.classList.add('visible'); });
     }
 
@@ -149,10 +146,8 @@
     }
 
     /* ==========================================================
-       FORM VALIDATION - Registration Form
+       FORM VALIDATION HELPER
        ========================================================== */
-    var registrationForm = document.getElementById('registrationForm');
-
     function validateField(input, errorId, validationFn) {
         var errorEl = document.getElementById(errorId);
         var isValid = validationFn(input.value.trim());
@@ -166,13 +161,16 @@
         return isValid;
     }
 
+    /* ==========================================================
+       REGISTRATION FORM → Firestore
+       ========================================================== */
+    var registrationForm = document.getElementById('registrationForm');
+
     if (registrationForm) {
-        registrationForm.addEventListener('submit', function (e) {
+        registrationForm.addEventListener('submit', async function (e) {
             e.preventDefault();
 
             var isValid = true;
-
-            /* Validate each required field */
             isValid = validateField(document.getElementById('regFirstName'), 'regFirstNameError', function (v) { return v.length > 0; }) && isValid;
             isValid = validateField(document.getElementById('regLastName'), 'regLastNameError', function (v) { return v.length > 0; }) && isValid;
             isValid = validateField(document.getElementById('regEmail'), 'regEmailError', function (v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }) && isValid;
@@ -182,7 +180,6 @@
             isValid = validateField(document.getElementById('regYear'), 'regYearError', function (v) { return v !== ''; }) && isValid;
             isValid = validateField(document.getElementById('regEvent'), 'regEventError', function (v) { return v !== ''; }) && isValid;
 
-            /* Terms checkbox */
             var termsCheckbox = document.getElementById('regTerms');
             var termsError = document.getElementById('regTermsError');
             if (!termsCheckbox.checked) {
@@ -192,8 +189,27 @@
                 if (termsError) termsError.style.display = 'none';
             }
 
-            if (isValid) {
-                /* Collect form data */
+            if (!isValid) {
+                showToast('Please fix the errors in the form.', 'error');
+                var firstError = registrationForm.querySelector('.error');
+                if (firstError) {
+                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    firstError.focus();
+                }
+                return;
+            }
+
+            /* Disable submit button during save */
+            var submitBtn = document.getElementById('regSubmitBtn');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span class="spinner"></span> Saving...';
+            }
+
+            try {
+                var eventSelect = document.getElementById('regEvent');
+                var eventText = eventSelect.options[eventSelect.selectedIndex].text;
+
                 var formData = {
                     firstName: document.getElementById('regFirstName').value,
                     lastName: document.getElementById('regLastName').value,
@@ -202,21 +218,14 @@
                     studentId: document.getElementById('regStudentId').value,
                     department: document.getElementById('regDepartment').value,
                     year: document.getElementById('regYear').value,
-                    event: document.getElementById('regEvent'),
+                    event: eventSelect.value,
+                    eventName: eventText,
                     requirements: document.getElementById('regRequirements').value
                 };
 
-                var eventSelect = document.getElementById('regEvent');
-                var eventText = eventSelect.options[eventSelect.selectedIndex].text;
-
-                /* Save to localStorage */
-                var registrations = JSON.parse(localStorage.getItem('cems_registrations') || '[]');
-                formData.id = 'REG-' + String(registrations.length + 1).padStart(3, '0');
-                formData.date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-                formData.status = 'Confirmed';
-                formData.eventName = eventText;
-                registrations.push(formData);
-                localStorage.setItem('cems_registrations', JSON.stringify(registrations));
+                /* Save to Firestore */
+                var saved = await saveRegistration(formData);
+                var displayId = 'REG-' + saved.id.substring(0, 8).toUpperCase();
 
                 /* Show confirmation */
                 registrationForm.style.display = 'none';
@@ -229,7 +238,7 @@
                 var details = document.getElementById('confirmationDetails');
                 if (details) {
                     details.innerHTML =
-                        '<div class="detail-row"><span class="detail-label">Registration ID</span><span class="detail-value">' + formData.id + '</span></div>' +
+                        '<div class="detail-row"><span class="detail-label">Registration ID</span><span class="detail-value">' + displayId + '</span></div>' +
                         '<div class="detail-row"><span class="detail-label">Name</span><span class="detail-value">' + formData.firstName + ' ' + formData.lastName + '</span></div>' +
                         '<div class="detail-row"><span class="detail-label">Email</span><span class="detail-value">' + formData.email + '</span></div>' +
                         '<div class="detail-row"><span class="detail-label">Event</span><span class="detail-value">' + eventText + '</span></div>' +
@@ -237,22 +246,21 @@
                         '<div class="detail-row"><span class="detail-label">Status</span><span class="detail-value" style="color: var(--success);">✓ Confirmed</span></div>';
                 }
 
-                showToast('Registration successful! Check your email for confirmation.', 'success');
+                showToast('Registration saved to Firebase! Check your email for confirmation.', 'success');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
-            } else {
-                showToast('Please fix the errors in the form.', 'error');
-                /* Scroll to first error */
-                var firstError = registrationForm.querySelector('.error');
-                if (firstError) {
-                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    firstError.focus();
+
+            } catch (err) {
+                console.error('[CEMS] Registration save error:', err);
+                showToast('Error saving to Firebase: ' + err.message, 'error');
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Complete Registration';
                 }
             }
         });
 
         /* Real-time validation on blur */
-        var requiredFields = registrationForm.querySelectorAll('[required]');
-        requiredFields.forEach(function (field) {
+        registrationForm.querySelectorAll('[required]').forEach(function (field) {
             field.addEventListener('blur', function () {
                 if (field.type === 'checkbox') {
                     var termsError = document.getElementById('regTermsError');
@@ -283,12 +291,12 @@
     }
 
     /* ==========================================================
-       FORM VALIDATION - Contact Form
+       CONTACT FORM → Firestore
        ========================================================== */
     var contactForm = document.getElementById('contactForm');
 
     if (contactForm) {
-        contactForm.addEventListener('submit', function (e) {
+        contactForm.addEventListener('submit', async function (e) {
             e.preventDefault();
             var isValid = true;
 
@@ -297,32 +305,45 @@
             isValid = validateField(document.getElementById('contactSubject'), 'contactSubjectError', function (v) { return v !== ''; }) && isValid;
             isValid = validateField(document.getElementById('contactMessage'), 'contactMessageError', function (v) { return v.length >= 20; }) && isValid;
 
-            if (isValid) {
-                var formData = {
-                    name: document.getElementById('contactName').value,
-                    email: document.getElementById('contactEmail').value,
-                    subject: document.getElementById('contactSubject').value,
-                    message: document.getElementById('contactMessage').value,
-                    newsletter: document.getElementById('contactNewsletter').checked
-                };
-
-                /* Save to localStorage */
-                var messages = JSON.parse(localStorage.getItem('cems_messages') || '[]');
-                formData.id = 'MSG-' + String(messages.length + 1).padStart(3, '0');
-                formData.date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-                formData.status = 'Unread';
-                messages.push(formData);
-                localStorage.setItem('cems_messages', JSON.stringify(messages));
-
-                /* Show success */
-                contactForm.reset();
-                showToast('Message sent successfully! We\'ll get back to you within 24 hours.', 'success');
-            } else {
+            if (!isValid) {
                 showToast('Please fix the errors in the form.', 'error');
                 var firstError = contactForm.querySelector('.error');
                 if (firstError) {
                     firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     firstError.focus();
+                }
+                return;
+            }
+
+            var submitBtn = document.getElementById('contactSubmitBtn');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span class="spinner"></span> Sending...';
+            }
+
+            try {
+                var subjectSelect = document.getElementById('contactSubject');
+                var formData = {
+                    name: document.getElementById('contactName').value,
+                    email: document.getElementById('contactEmail').value,
+                    subject: subjectSelect.value,
+                    subjectLabel: subjectSelect.options[subjectSelect.selectedIndex].text,
+                    message: document.getElementById('contactMessage').value,
+                    newsletter: document.getElementById('contactNewsletter').checked
+                };
+
+                await saveMessage(formData);
+
+                contactForm.reset();
+                showToast('Message sent to Firebase! We\'ll get back to you within 24 hours.', 'success');
+
+            } catch (err) {
+                console.error('[CEMS] Message save error:', err);
+                showToast('Error sending message: ' + err.message, 'error');
+            } finally {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Send Message';
                 }
             }
         });
@@ -335,20 +356,20 @@
     var tabContents = document.querySelectorAll('.tab-content');
 
     function switchTab(tabName) {
-        /* Update sidebar active state */
         sidebarLinks.forEach(function (link) {
             link.classList.toggle('active', link.getAttribute('data-tab') === tabName);
         });
-
-        /* Show/hide tab content */
         tabContents.forEach(function (content) {
-            var isActive = content.id === 'tab-' + tabName;
-            content.classList.toggle('active', isActive);
+            content.classList.toggle('active', content.id === 'tab-' + tabName);
         });
-
-        /* Close mobile sidebar if open */
         var dashSidebar = document.getElementById('dashboardSidebar');
         if (dashSidebar) dashSidebar.classList.remove('show');
+
+        /* Load data from Firestore when switching tabs */
+        if (tabName === 'registrations') loadRegistrationsTable();
+        if (tabName === 'messages') loadMessagesTable();
+        if (tabName === 'events-manage') loadEventsManageTable();
+        if (tabName === 'overview') loadDashboardOverview();
     }
 
     sidebarLinks.forEach(function (link) {
@@ -372,12 +393,8 @@
 
     function checkDashboardLayout() {
         if (sidebarToggle && dashSidebar) {
-            if (window.innerWidth <= 1024) {
-                sidebarToggle.style.display = 'block';
-            } else {
-                sidebarToggle.style.display = 'none';
-                dashSidebar.classList.remove('show');
-            }
+            sidebarToggle.style.display = window.innerWidth <= 1024 ? 'block' : 'none';
+            if (window.innerWidth > 1024) dashSidebar.classList.remove('show');
         }
     }
 
@@ -389,6 +406,260 @@
 
     window.addEventListener('resize', checkDashboardLayout);
     checkDashboardLayout();
+
+    /* ==========================================================
+       ADMIN DASHBOARD - Load Overview from Firestore
+       ========================================================== */
+    async function loadDashboardOverview() {
+        try {
+            var stats = await getDashboardStats();
+
+            /* Update stat cards */
+            var statValues = document.querySelectorAll('.dashboard-stat-value');
+            if (statValues.length >= 4) {
+                statValues[0].textContent = stats.totalEvents;
+                statValues[1].textContent = stats.totalRegistrations;
+                statValues[2].textContent = stats.totalMessages;
+                statValues[3].textContent = stats.totalRegistrations + stats.totalMessages;
+            }
+
+            /* Load recent registrations */
+            var regs = await getAllRegistrations();
+            var recentRegs = regs.slice(0, 5);
+            var overviewRegTable = document.querySelector('#tab-overview .dashboard-table-card:first-child tbody');
+            if (overviewRegTable && recentRegs.length) {
+                overviewRegTable.innerHTML = recentRegs.map(function (r) {
+                    var statusClass = r.status === 'Confirmed' ? 'confirmed' : r.status === 'Pending' ? 'pending' : 'cancelled';
+                    var statusIcon = r.status === 'Confirmed' ? '✓' : r.status === 'Pending' ? '◷' : '✕';
+                    return '<tr>' +
+                        '<td><strong>' + (r.firstName || '') + ' ' + (r.lastName || '') + '</strong></td>' +
+                        '<td>' + (r.eventName || r.event || '') + '</td>' +
+                        '<td>' + (r.department || '') + '</td>' +
+                        '<td>' + r.createdAt + '</td>' +
+                        '<td><span class="status-badge ' + statusClass + '">' + statusIcon + ' ' + r.status + '</span></td>' +
+                        '<td><div class="table-actions"><button class="table-action-btn" aria-label="View" title="View">👁</button><button class="table-action-btn delete" aria-label="Delete" title="Delete" data-id="' + r.id + '" data-type="registration">🗑</button></div></td>' +
+                        '</tr>';
+                }).join('');
+                bindDeleteButtons(overviewRegTable);
+                bindViewButtons(overviewRegTable);
+            }
+
+            /* Load recent messages */
+            var msgs = await getAllMessages();
+            var recentMsgs = msgs.slice(0, 3);
+            var overviewMsgTable = document.querySelectorAll('#tab-overview .dashboard-table-card')[1];
+            if (overviewMsgTable) {
+                var tbody = overviewMsgTable.querySelector('tbody');
+                if (tbody && recentMsgs.length) {
+                    tbody.innerHTML = recentMsgs.map(function (m) {
+                        var statusClass = m.status === 'Read' ? 'read' : 'unread';
+                        var msgPreview = (m.message || '').substring(0, 60) + ((m.message || '').length > 60 ? '...' : '');
+                        return '<tr>' +
+                            '<td><strong>' + (m.name || '') + '</strong></td>' +
+                            '<td>' + (m.subjectLabel || m.subject || '') + '</td>' +
+                            '<td>' + m.createdAt + '</td>' +
+                            '<td><span class="status-badge ' + statusClass + '">' + (m.status === 'Read' ? '✓ Read' : '● Unread') + '</span></td>' +
+                            '<td><div class="table-actions"><button class="table-action-btn" aria-label="Read" title="Read">👁</button><button class="table-action-btn delete" aria-label="Delete" title="Delete" data-id="' + m.id + '" data-type="message">🗑</button></div></td>' +
+                            '</tr>';
+                    }).join('');
+                    bindDeleteButtons(tbody);
+                    bindViewButtons(tbody);
+                }
+            }
+
+        } catch (err) {
+            console.error('[CEMS] Dashboard overview error:', err);
+        }
+    }
+
+    /* ==========================================================
+       ADMIN DASHBOARD - Load Registrations Table from Firestore
+       ========================================================== */
+    async function loadRegistrationsTable() {
+        try {
+            var regs = await getAllRegistrations();
+            var tbody = document.querySelector('#registrationsTable tbody');
+            var countDisplay = document.getElementById('regCountDisplay');
+            if (countDisplay) countDisplay.textContent = regs.length;
+
+            if (!tbody) return;
+
+            if (regs.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; padding:40px; color:var(--text-muted);">No registrations yet. Registrations will appear here once users submit the form.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = regs.map(function (r, idx) {
+                var displayId = '#REG-' + String(idx + 1).padStart(3, '0');
+                var statusClass = r.status === 'Confirmed' ? 'confirmed' : r.status === 'Pending' ? 'pending' : 'cancelled';
+                var statusIcon = r.status === 'Confirmed' ? '✓' : r.status === 'Pending' ? '◷' : '✕';
+                return '<tr>' +
+                    '<td>' + displayId + '</td>' +
+                    '<td><strong>' + (r.firstName || '') + ' ' + (r.lastName || '') + '</strong></td>' +
+                    '<td>' + (r.email || '') + '</td>' +
+                    '<td>' + (r.eventName || r.event || '') + '</td>' +
+                    '<td>' + (r.department || '') + '</td>' +
+                    '<td>' + (r.year || '') + '</td>' +
+                    '<td>' + r.createdAt + '</td>' +
+                    '<td><span class="status-badge ' + statusClass + '">' + statusIcon + ' ' + r.status + '</span></td>' +
+                    '<td><div class="table-actions">' +
+                    '<button class="table-action-btn" aria-label="View" title="View">👁</button>' +
+                    '<button class="table-action-btn" aria-label="Edit" title="Edit">✏️</button>' +
+                    '<button class="table-action-btn delete" aria-label="Delete" title="Delete" data-id="' + r.id + '" data-type="registration">🗑</button>' +
+                    '</div></td>' +
+                    '</tr>';
+            }).join('');
+
+            bindDeleteButtons(tbody);
+            bindViewButtons(tbody);
+
+        } catch (err) {
+            console.error('[CEMS] Load registrations error:', err);
+        }
+    }
+
+    /* ==========================================================
+       ADMIN DASHBOARD - Load Messages Table from Firestore
+       ========================================================== */
+    async function loadMessagesTable() {
+        try {
+            var msgs = await getAllMessages();
+            var tbody = document.querySelector('#messagesTable tbody');
+            var countDisplay = document.getElementById('msgCountDisplay');
+            if (countDisplay) countDisplay.textContent = msgs.length;
+
+            if (!tbody) return;
+
+            if (msgs.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:40px; color:var(--text-muted);">No messages yet. Contact form submissions will appear here.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = msgs.map(function (m, idx) {
+                var displayId = '#MSG-' + String(idx + 1).padStart(3, '0');
+                var statusClass = m.status === 'Read' ? 'read' : 'unread';
+                var msgPreview = (m.message || '').substring(0, 60) + ((m.message || '').length > 60 ? '...' : '');
+                return '<tr>' +
+                    '<td>' + displayId + '</td>' +
+                    '<td><strong>' + (m.name || '') + '</strong></td>' +
+                    '<td>' + (m.email || '') + '</td>' +
+                    '<td>' + (m.subjectLabel || m.subject || '') + '</td>' +
+                    '<td style="max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">' + msgPreview + '</td>' +
+                    '<td>' + m.createdAt + '</td>' +
+                    '<td><span class="status-badge ' + statusClass + '">' + (m.status === 'Read' ? '✓ Read' : '● Unread') + '</span></td>' +
+                    '<td><div class="table-actions">' +
+                    '<button class="table-action-btn" aria-label="Read" title="Read">👁</button>' +
+                    '<button class="table-action-btn" aria-label="Reply" title="Reply">↩</button>' +
+                    '<button class="table-action-btn delete" aria-label="Delete" title="Delete" data-id="' + m.id + '" data-type="message">🗑</button>' +
+                    '</div></td>' +
+                    '</tr>';
+            }).join('');
+
+            bindDeleteButtons(tbody);
+            bindViewButtons(tbody);
+
+        } catch (err) {
+            console.error('[CEMS] Load messages error:', err);
+        }
+    }
+
+    /* ==========================================================
+       ADMIN DASHBOARD - Load Events Manage Table from Firestore
+       ========================================================== */
+    async function loadEventsManageTable() {
+        try {
+            var events = await getAllEvents();
+            var tbody = document.querySelector('#eventsManageTable tbody');
+            var countDisplay = document.getElementById('eventCountDisplay');
+            if (countDisplay) countDisplay.textContent = events.length;
+
+            if (!tbody) return;
+
+            if (events.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:40px; color:var(--text-muted);">No events yet.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = events.map(function (evt, idx) {
+                var displayId = '#EVT-' + String(idx + 1).padStart(3, '0');
+                var statusClass = evt.status === 'Active' ? 'confirmed' : evt.status === 'Ongoing' ? 'pending' : 'cancelled';
+                return '<tr>' +
+                    '<td>' + displayId + '</td>' +
+                    '<td><strong>' + (evt.emoji || '📅') + ' ' + (evt.name || '') + '</strong></td>' +
+                    '<td>' + (evt.category || '') + '</td>' +
+                    '<td>' + (evt.date || '') + '</td>' +
+                    '<td>' + (evt.location || '') + '</td>' +
+                    '<td>' + (evt.capacity || 0) + '</td>' +
+                    '<td><span class="status-badge ' + statusClass + '">' + evt.status + '</span></td>' +
+                    '<td><div class="table-actions">' +
+                    '<button class="table-action-btn" aria-label="View" title="View">👁</button>' +
+                    '<button class="table-action-btn" aria-label="Edit" title="Edit">✏️</button>' +
+                    '<button class="table-action-btn delete" aria-label="Delete" title="Delete" data-id="' + evt.id + '" data-type="event">🗑</button>' +
+                    '</div></td>' +
+                    '</tr>';
+            }).join('');
+
+            bindDeleteButtons(tbody);
+            bindViewButtons(tbody);
+
+        } catch (err) {
+            console.error('[CEMS] Load events error:', err);
+        }
+    }
+
+    /* ==========================================================
+       ADMIN - Bind Delete Buttons (with Firestore)
+       ========================================================== */
+    function bindDeleteButtons(container) {
+        container.querySelectorAll('.table-action-btn.delete').forEach(function (btn) {
+            btn.addEventListener('click', async function () {
+                var docId = btn.getAttribute('data-id');
+                var type = btn.getAttribute('data-type');
+                if (!docId || !confirm('Are you sure you want to delete this item from Firebase?')) return;
+
+                try {
+                    if (type === 'registration') await deleteRegistration(docId);
+                    else if (type === 'message') await deleteMessage(docId);
+                    else if (type === 'event') await deleteEvent(docId);
+
+                    var row = btn.closest('tr');
+                    if (row) {
+                        row.style.opacity = '0';
+                        row.style.transform = 'translateX(20px)';
+                        row.style.transition = 'all 0.3s ease';
+                        setTimeout(function () { row.remove(); }, 300);
+                    }
+                    showToast('Item deleted from Firebase.', 'success');
+                } catch (err) {
+                    showToast('Delete failed: ' + err.message, 'error');
+                }
+            });
+        });
+    }
+
+    /* ==========================================================
+       ADMIN - Bind View Buttons (Modal)
+       ========================================================== */
+    function bindViewButtons(container) {
+        container.querySelectorAll('.table-action-btn[title="View"], .table-action-btn[title="Read"]').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var row = btn.closest('tr');
+                if (!row) return;
+                var cells = row.querySelectorAll('td');
+                var content = '<div style="display: flex; flex-direction: column; gap: var(--space-sm);">';
+                cells.forEach(function (cell, i) {
+                    var header = document.querySelector('#' + row.closest('table').id + ' th:nth-child(' + (i + 1) + ')');
+                    var label = header ? header.textContent : 'Field ' + (i + 1);
+                    content += '<div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border-color);">' +
+                        '<span style="color: var(--text-muted); font-size: var(--font-size-sm);">' + label + '</span>' +
+                        '<span style="font-weight: 600; font-size: var(--font-size-sm); text-align: right; max-width: 60%;">' + cell.textContent.trim() + '</span>' +
+                        '</div>';
+                });
+                content += '</div>';
+                openModal('Detail View', content);
+            });
+        });
+    }
 
     /* ==========================================================
        ADMIN DASHBOARD - Table Search
@@ -415,9 +686,7 @@
                 }
             });
 
-            if (countDisplay) {
-                countDisplay.textContent = visibleCount;
-            }
+            if (countDisplay) countDisplay.textContent = visibleCount;
         });
     }
 
@@ -450,6 +719,9 @@
         }
     }
 
+    window.CEMS.openModal = openModal;
+    window.CEMS.closeModal = closeModal;
+
     if (modalClose) modalClose.addEventListener('click', closeModal);
     if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeModal);
     if (detailModal) {
@@ -457,42 +729,6 @@
             if (e.target === detailModal) closeModal();
         });
     }
-
-    /* View buttons in tables */
-    document.querySelectorAll('.table-action-btn[title="View"], .table-action-btn[aria-label*="View"], .table-action-btn[aria-label*="Read"]').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-            var row = btn.closest('tr');
-            if (!row) return;
-            var cells = row.querySelectorAll('td');
-            var content = '<div style="display: flex; flex-direction: column; gap: var(--space-sm);">';
-            cells.forEach(function (cell, i) {
-                var header = document.querySelector('th:nth-child(' + (i + 1) + ')');
-                var label = header ? header.textContent : 'Field ' + (i + 1);
-                content += '<div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border-color);">' +
-                    '<span style="color: var(--text-muted); font-size: var(--font-size-sm);">' + label + '</span>' +
-                    '<span style="font-weight: 600; font-size: var(--font-size-sm); text-align: right; max-width: 60%;">' + cell.textContent.trim() + '</span>' +
-                    '</div>';
-            });
-            content += '</div>';
-            openModal('Detail View', content);
-        });
-    });
-
-    /* Delete buttons */
-    document.querySelectorAll('.table-action-btn[title="Delete"], .table-action-btn[aria-label*="Delete"]').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-            if (confirm('Are you sure you want to delete this item?')) {
-                var row = btn.closest('tr');
-                if (row) {
-                    row.style.opacity = '0';
-                    row.style.transform = 'translateX(20px)';
-                    row.style.transition = 'all 0.3s ease';
-                    setTimeout(function () { row.remove(); }, 300);
-                    showToast('Item deleted successfully.', 'success');
-                }
-            }
-        });
-    });
 
     /* ==========================================================
        ADMIN - Current Date Display
@@ -505,7 +741,7 @@
     }
 
     /* ==========================================================
-       ADMIN - Export CSV Functionality
+       ADMIN - Export CSV
        ========================================================== */
     function exportTableToCSV(tableId, filename) {
         var table = document.getElementById(tableId);
@@ -537,33 +773,60 @@
     }
 
     var exportRegBtn = document.getElementById('exportRegBtn');
-    if (exportRegBtn) {
-        exportRegBtn.addEventListener('click', function () {
-            exportTableToCSV('registrationsTable', 'cems_registrations.csv');
-        });
-    }
+    if (exportRegBtn) exportRegBtn.addEventListener('click', function () { exportTableToCSV('registrationsTable', 'cems_registrations.csv'); });
 
     var exportMsgBtn = document.getElementById('exportMsgBtn');
-    if (exportMsgBtn) {
-        exportMsgBtn.addEventListener('click', function () {
-            exportTableToCSV('messagesTable', 'cems_messages.csv');
-        });
-    }
+    if (exportMsgBtn) exportMsgBtn.addEventListener('click', function () { exportTableToCSV('messagesTable', 'cems_messages.csv'); });
 
     /* ==========================================================
-       ADMIN - Add Event Button (placeholder action)
+       ADMIN - Add Event → Firestore
        ========================================================== */
     var addEventBtn = document.getElementById('addEventBtn');
     if (addEventBtn) {
         addEventBtn.addEventListener('click', function () {
             openModal('Add New Event',
-                '<div class="form-group"><label class="form-label">Event Name</label><input type="text" class="form-input" placeholder="Enter event name"></div>' +
-                '<div class="form-group"><label class="form-label">Category</label><select class="form-select"><option>Academic</option><option>Cultural</option><option>Sports</option><option>Workshop</option></select></div>' +
-                '<div class="form-group"><label class="form-label">Date</label><input type="date" class="form-input"></div>' +
-                '<div class="form-group"><label class="form-label">Location</label><input type="text" class="form-input" placeholder="Enter location"></div>' +
-                '<div class="form-group"><label class="form-label">Capacity</label><input type="number" class="form-input" placeholder="Max attendees"></div>' +
-                '<button class="btn btn-primary" style="width: 100%;" onclick="CEMS.showToast(\'Event created successfully!\', \'success\'); document.getElementById(\'detailModal\').classList.remove(\'show\'); document.body.style.overflow=\'\';">Create Event</button>'
+                '<div class="form-group"><label class="form-label">Event Name *</label><input type="text" class="form-input" id="newEventName" placeholder="Enter event name"></div>' +
+                '<div class="form-group"><label class="form-label">Category</label><select class="form-select" id="newEventCategory"><option>Academic</option><option>Cultural</option><option>Sports</option><option>Workshop</option><option>Social</option></select></div>' +
+                '<div class="form-group"><label class="form-label">Date & Time</label><input type="text" class="form-input" id="newEventDate" placeholder="e.g., April 15, 2026 • 10:00 AM"></div>' +
+                '<div class="form-group"><label class="form-label">Location</label><input type="text" class="form-input" id="newEventLocation" placeholder="e.g., Main Auditorium"></div>' +
+                '<div class="form-group"><label class="form-label">Capacity</label><input type="number" class="form-input" id="newEventCapacity" placeholder="Max attendees"></div>' +
+                '<div class="form-group"><label class="form-label">Description</label><textarea class="form-textarea" id="newEventDesc" placeholder="Brief description..." rows="2"></textarea></div>' +
+                '<button class="btn btn-primary" style="width: 100%;" id="saveNewEventBtn">Create Event in Firebase</button>'
             );
+
+            setTimeout(function () {
+                var saveBtn = document.getElementById('saveNewEventBtn');
+                if (saveBtn) {
+                    saveBtn.addEventListener('click', async function () {
+                        var name = document.getElementById('newEventName').value.trim();
+                        if (!name) { showToast('Event name is required.', 'error'); return; }
+
+                        saveBtn.disabled = true;
+                        saveBtn.innerHTML = '<span class="spinner"></span> Creating...';
+
+                        try {
+                            await saveEvent({
+                                name: name,
+                                category: document.getElementById('newEventCategory').value,
+                                date: document.getElementById('newEventDate').value,
+                                location: document.getElementById('newEventLocation').value,
+                                capacity: document.getElementById('newEventCapacity').value,
+                                description: document.getElementById('newEventDesc').value,
+                                status: 'Active',
+                                emoji: '📅'
+                            });
+
+                            closeModal();
+                            showToast('Event created in Firebase!', 'success');
+                            loadEventsManageTable();
+                        } catch (err) {
+                            showToast('Error: ' + err.message, 'error');
+                            saveBtn.disabled = false;
+                            saveBtn.textContent = 'Create Event in Firebase';
+                        }
+                    });
+                }
+            }, 100);
         });
     }
 
@@ -576,5 +839,12 @@
             closeMobileNav();
         }
     });
+
+    /* ==========================================================
+       ADMIN - Auto-load overview on page load
+       ========================================================== */
+    if (document.getElementById('tab-overview')) {
+        loadDashboardOverview();
+    }
 
 })();
