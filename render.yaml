@@ -1,0 +1,10 @@
+services:
+  - type: static_site
+    name: cems-campus-events
+    runtime: static
+    buildCommand: echo "Static site - no build needed"
+    staticPublishPath: .
+    routes:
+      - type: rewrite
+        from: /*
+        to: /index.html
