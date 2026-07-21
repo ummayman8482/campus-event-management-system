@@ -29,6 +29,7 @@ const db = firebase.firestore();
 const registrationsRef = db.collection('registrations');
 const messagesRef = db.collection('messages');
 const eventsRef = db.collection('events');
+const adminsRef = db.collection('admins');
 
 /* ============================================================
    HELPER: Generate a short unique ID
@@ -249,6 +250,49 @@ async function seedEventsIfEmpty() {
 }
 
 /* ============================================================
+   ADMIN USERS - Authentication from Firestore
+   ============================================================ */
+
+/**
+ * Authenticate an admin user against Firestore
+ * Looks up the admins collection for a matching username and password
+ * @param {string} username - The username to check
+ * @param {string} password - The password to check
+ * @returns {Promise<Object|null>} - Admin data if valid, null if not
+ */
+async function authenticateAdmin(username, password) {
+    const snapshot = await adminsRef
+        .where('username', '==', username)
+        .where('password', '==', password)
+        .limit(1)
+        .get();
+
+    if (snapshot.empty) return null;
+
+    const doc = snapshot.docs[0];
+    return { id: doc.id, ...doc.data() };
+}
+
+/**
+ * Seed the default admin user if admins collection is empty
+ * Default credentials: ummy / 1234
+ */
+async function seedAdminIfEmpty() {
+    const snapshot = await adminsRef.limit(1).get();
+    if (snapshot.empty) {
+        await adminsRef.add({
+            username: 'ummy',
+            password: '1234',
+            fullName: 'Ummy',
+            role: 'Administrator',
+            email: 'ummy@university.edu',
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        console.log('[CEMS] Default admin user seeded into Firestore.');
+    }
+}
+
+/* ============================================================
    DASHBOARD STATS
    ============================================================ */
 async function getDashboardStats() {
@@ -267,5 +311,6 @@ async function getDashboardStats() {
     };
 }
 
-/* Auto-seed events on load */
+/* Auto-seed events and admin on load */
 seedEventsIfEmpty().catch(err => console.warn('[CEMS] Seed check:', err.message));
+seedAdminIfEmpty().catch(err => console.warn('[CEMS] Admin seed check:', err.message));

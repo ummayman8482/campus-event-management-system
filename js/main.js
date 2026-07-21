@@ -839,18 +839,19 @@
 
     /* Only run login logic if the login overlay exists (admin page) */
     if (adminLoginOverlay) {
-        var ADMIN_USER = 'ummy';
-        var ADMIN_PASS = '1234';
         var LOGIN_SESSION_KEY = 'cems_admin_logged_in';
         var REMEMBER_KEY = 'cems_admin_remember';
 
-        function showDashboard() {
+        function showDashboard(adminName) {
             adminLoginOverlay.style.display = 'none';
             var mainEl = document.getElementById('main-content');
             if (mainEl) mainEl.style.display = '';
             /* Show admin badge in header */
             var badge = document.getElementById('adminUserBadge');
-            if (badge) badge.style.display = 'flex';
+            if (badge) {
+                badge.style.display = 'flex';
+                badge.innerHTML = '<span aria-hidden="true">👤</span> Admin: ' + (adminName || 'Ummy');
+            }
         }
 
         function showLogin() {
@@ -865,15 +866,16 @@
         /* Check if already logged in */
         var isLoggedIn = sessionStorage.getItem(LOGIN_SESSION_KEY) === 'true';
         var isRemembered = localStorage.getItem(REMEMBER_KEY) === 'true';
+        var savedAdminName = sessionStorage.getItem('cems_admin_name') || localStorage.getItem('cems_admin_name') || 'Admin';
 
         if (isLoggedIn || isRemembered) {
-            showDashboard();
+            showDashboard(savedAdminName);
         } else {
             showLogin();
         }
 
-        /* Handle login form submission */
-        adminLoginForm.addEventListener('submit', function (e) {
+        /* Handle login form submission — validates against Firestore */
+        adminLoginForm.addEventListener('submit', async function (e) {
             e.preventDefault();
 
             var username = document.getElementById('adminUsername').value.trim();
@@ -882,41 +884,61 @@
             var generalError = document.getElementById('adminLoginGeneralError');
             var isValid = true;
 
-            /* Validate username */
+            /* Validate inputs not empty */
             isValid = validateField(document.getElementById('adminUsername'), 'adminUsernameError', function (v) { return v.length > 0; }) && isValid;
             isValid = validateField(document.getElementById('adminPassword'), 'adminPasswordError', function (v) { return v.length > 0; }) && isValid;
 
             if (!isValid) return;
 
-            /* Check credentials */
-            if (username === ADMIN_USER && password === ADMIN_PASS) {
-                /* Success */
-                sessionStorage.setItem(LOGIN_SESSION_KEY, 'true');
-                if (remember) {
-                    localStorage.setItem(REMEMBER_KEY, 'true');
-                }
-                if (generalError) generalError.style.display = 'none';
-                showDashboard();
-                showToast('Welcome back, Ummy! You are now logged in.', 'success');
+            /* Disable button during auth */
+            var loginBtn = document.getElementById('adminLoginBtn');
+            if (loginBtn) {
+                loginBtn.disabled = true;
+                loginBtn.innerHTML = '<span class="spinner"></span> Authenticating...';
+            }
 
-                /* Add logout button to sidebar */
-                addLogoutButton();
-            } else {
-                /* Failure */
-                if (generalError) generalError.style.display = 'block';
-                document.getElementById('adminPassword').value = '';
-                document.getElementById('adminPassword').focus();
-                showToast('Invalid credentials. Please try again.', 'error');
+            try {
+                /* Query Firestore for matching admin credentials */
+                var admin = await authenticateAdmin(username, password);
+
+                if (admin) {
+                    /* Success */
+                    sessionStorage.setItem(LOGIN_SESSION_KEY, 'true');
+                    sessionStorage.setItem('cems_admin_name', admin.fullName || admin.username);
+                    if (remember) {
+                        localStorage.setItem(REMEMBER_KEY, 'true');
+                        localStorage.setItem('cems_admin_name', admin.fullName || admin.username);
+                    }
+                    if (generalError) generalError.style.display = 'none';
+                    showDashboard(admin.fullName || admin.username);
+                    showToast('Welcome back, ' + (admin.fullName || admin.username) + '! You are now logged in.', 'success');
+                    addLogoutButton();
+                } else {
+                    /* Invalid credentials */
+                    if (generalError) generalError.style.display = 'block';
+                    document.getElementById('adminPassword').value = '';
+                    document.getElementById('adminPassword').focus();
+                    showToast('Invalid username or password. Please try again.', 'error');
+                }
+            } catch (err) {
+                console.error('[CEMS] Login error:', err);
+                if (generalError) {
+                    generalError.style.display = 'block';
+                    generalError.querySelector('div').textContent = 'Connection error: ' + err.message;
+                }
+                showToast('Error connecting to Firebase: ' + err.message, 'error');
+            } finally {
+                if (loginBtn) {
+                    loginBtn.disabled = false;
+                    loginBtn.textContent = 'Sign In';
+                }
             }
         });
 
         /* Add logout button to sidebar settings */
         function addLogoutButton() {
             var settingsNav = document.querySelector('.dashboard-sidebar .sidebar-menu:last-child');
-            if (!settingsNav) return;
-
-            /* Check if logout button already exists */
-            if (document.getElementById('adminLogoutBtn')) return;
+            if (!settingsNav || document.getElementById('adminLogoutBtn')) return;
 
             var logoutItem = document.createElement('a');
             logoutItem.href = '#';
@@ -926,7 +948,9 @@
             logoutItem.addEventListener('click', function (e) {
                 e.preventDefault();
                 sessionStorage.removeItem(LOGIN_SESSION_KEY);
+                sessionStorage.removeItem('cems_admin_name');
                 localStorage.removeItem(REMEMBER_KEY);
+                localStorage.removeItem('cems_admin_name');
                 showLogin();
                 document.getElementById('adminUsername').value = '';
                 document.getElementById('adminPassword').value = '';
