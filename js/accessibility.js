@@ -332,12 +332,25 @@
     }
 
     /* ==========================================================
-       GOOGLE TRANSLATE STUB
-       The Google Translate script calls this callback on load.
-       We use a cookie-based approach instead of the widget,
-       so this is intentionally empty.
+       GOOGLE TRANSLATE INITIALIZATION
        ========================================================== */
-    window.googleTranslateElementInit = function () { /* no-op */ };
+    /* This function is called by the Google Translate script on load.
+       It creates the widget in a hidden container so it reads the
+       googtrans cookie and translates the page automatically. */
+    window.googleTranslateElementInit = function () {
+        if (typeof google !== 'undefined' && google.translate) {
+            try {
+                new google.translate.TranslateElement({
+                    pageLanguage: 'en',
+                    includedLanguages: 'en,es,fr,de,zh,ar,hi,ja,ko,pt,ru,it,nl,sv,pl,tr,vi,th,id,ms,sw,bn,ur',
+                    layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                    autoDisplay: false
+                }, 'google_translate_element');
+            } catch (e) {
+                /* Google Translate failed to initialize */
+            }
+        }
+    };
 
     /* ==========================================================
        CUSTOM LANGUAGE SELECTOR
@@ -359,12 +372,13 @@
      * Set a cookie
      * @param {string} name
      * @param {string} value
-     * @param {number} days
+     * @param {number} days - Days until expiry (negative to delete)
      */
     function setCookie(name, value, days) {
         var date = new Date();
         date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-        document.cookie = name + '=' + value + ';expires=' + date.toUTCString() + ';path=/';
+        var cookie = name + '=' + value + ';expires=' + date.toUTCString() + ';path=/';
+        document.cookie = cookie;
     }
 
     /**
@@ -382,21 +396,23 @@
      * @param {string} lang - Target language code (e.g. 'en', 'fr', 'ar')
      */
     function translatePage(lang) {
-        /* Remove the googtrans cookie first to reset */
-        setCookie('googtrans', '', 365);
-
-        if (lang !== 'en') {
-            /* Set the Google Translate cookie to trigger translation */
+        if (lang === 'en') {
+            /* Going back to English - delete the googtrans cookie */
+            setCookie('googtrans', '', -1);
+            try {
+                localStorage.removeItem(LANG_KEY);
+            } catch (e) { /* ignore */ }
+        } else {
+            /* Set the Google Translate cookie: /source_lang/target_lang */
             setCookie('googtrans', '/en/' + lang, 365);
+            /* Save preference */
+            try {
+                localStorage.setItem(LANG_KEY, lang);
+            } catch (e) { /* ignore */ }
         }
 
-        /* Save preference */
-        try {
-            localStorage.setItem(LANG_KEY, lang);
-        } catch (e) { /* ignore */ }
-
-        /* Reload to apply the translation */
-        location.reload();
+        /* Full page navigation so Google Translate re-reads the cookie */
+        window.location.href = window.location.pathname + window.location.search;
     }
 
     /**
