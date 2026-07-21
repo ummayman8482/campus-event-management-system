@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Campus Event Management System - HCI Project",
   "scripts": {
-    "start": "npx serve -s . -l 10000",
+    "start": "npx serve . -l 10000",
     "build": "echo 'Static site - no build needed'"
   },
   "engines": {
