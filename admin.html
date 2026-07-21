@@ -31,6 +31,9 @@
                 <a href="admin.html" class="nav-link active" aria-current="page">Admin</a>
             </nav>
             <div class="header-actions">
+                <div id="adminUserBadge" style="display: none; align-items: center; gap: var(--space-sm); padding: 6px 14px; background: var(--success-light); color: var(--success); border-radius: var(--radius-full); font-size: var(--font-size-xs); font-weight: 600;">
+                    <span aria-hidden="true">👤</span> Admin: Ummy
+                </div>
                 <div class="font-size-controls" role="group" aria-label="Font size controls">
                     <button class="a11y-btn" id="fontDecrease" aria-label="Decrease font size" title="Decrease font size (A-)">A-</button>
                     <button class="a11y-btn" id="fontIncrease" aria-label="Increase font size" title="Increase font size (A+)">A+</button>
@@ -55,8 +58,54 @@
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main id="main-content" class="main-content" role="main" style="margin-top: var(--nav-height);">
+    <!-- ============================================================
+         ADMIN LOGIN OVERLAY
+         ============================================================ -->
+    <div class="admin-login-overlay" id="adminLoginOverlay">
+        <div class="admin-login-card">
+            <div class="admin-login-icon" aria-hidden="true">🔒</div>
+            <h1 class="admin-login-title">Admin Login</h1>
+            <p class="admin-login-subtitle">Enter your credentials to access the dashboard.</p>
+
+            <form id="adminLoginForm" novalidate>
+                <div class="form-group">
+                    <label class="form-label" for="adminUsername">Username <span class="required" aria-label="required">*</span></label>
+                    <input type="text" class="form-input" id="adminUsername" name="username" placeholder="Enter admin username" required aria-required="true" autocomplete="username">
+                    <div class="form-error" id="adminUsernameError">Please enter your username.</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="adminPassword">Password <span class="required" aria-label="required">*</span></label>
+                    <input type="password" class="form-input" id="adminPassword" name="password" placeholder="Enter password" required aria-required="true" autocomplete="current-password">
+                    <div class="form-error" id="adminPasswordError">Please enter your password.</div>
+                </div>
+
+                <div class="form-group" id="adminLoginGeneralError" style="display: none;">
+                    <div style="background: var(--danger-light); color: var(--danger); padding: 10px 14px; border-radius: var(--radius-md); font-size: var(--font-size-sm); font-weight: 500;">
+                        Invalid username or password. Please try again.
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-check">
+                        <input type="checkbox" id="adminRemember" name="remember">
+                        <span class="form-check-label">Remember me on this device</span>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;" id="adminLoginBtn">
+                    Sign In
+                </button>
+            </form>
+
+            <div class="admin-login-footer">
+                <a href="index.html">← Back to CEMS Home</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content (hidden until login) -->
+    <main id="main-content" class="main-content" role="main" style="margin-top: var(--nav-height); display: none;">
 
         <div class="dashboard-layout">
             <!-- Sidebar -->

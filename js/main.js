@@ -831,6 +831,117 @@
     }
 
     /* ==========================================================
+       ADMIN LOGIN
+       ========================================================== */
+    var adminLoginOverlay = document.getElementById('adminLoginOverlay');
+    var adminLoginForm = document.getElementById('adminLoginForm');
+    var dashboardContent = document.getElementById('main-content') || document.querySelector('.dashboard-layout');
+
+    /* Only run login logic if the login overlay exists (admin page) */
+    if (adminLoginOverlay) {
+        var ADMIN_USER = 'ummy';
+        var ADMIN_PASS = '1234';
+        var LOGIN_SESSION_KEY = 'cems_admin_logged_in';
+        var REMEMBER_KEY = 'cems_admin_remember';
+
+        function showDashboard() {
+            adminLoginOverlay.style.display = 'none';
+            var mainEl = document.getElementById('main-content');
+            if (mainEl) mainEl.style.display = '';
+            /* Show admin badge in header */
+            var badge = document.getElementById('adminUserBadge');
+            if (badge) badge.style.display = 'flex';
+        }
+
+        function showLogin() {
+            adminLoginOverlay.style.display = 'flex';
+            var mainEl = document.getElementById('main-content');
+            if (mainEl) mainEl.style.display = 'none';
+            /* Hide admin badge */
+            var badge = document.getElementById('adminUserBadge');
+            if (badge) badge.style.display = 'none';
+        }
+
+        /* Check if already logged in */
+        var isLoggedIn = sessionStorage.getItem(LOGIN_SESSION_KEY) === 'true';
+        var isRemembered = localStorage.getItem(REMEMBER_KEY) === 'true';
+
+        if (isLoggedIn || isRemembered) {
+            showDashboard();
+        } else {
+            showLogin();
+        }
+
+        /* Handle login form submission */
+        adminLoginForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            var username = document.getElementById('adminUsername').value.trim();
+            var password = document.getElementById('adminPassword').value;
+            var remember = document.getElementById('adminRemember').checked;
+            var generalError = document.getElementById('adminLoginGeneralError');
+            var isValid = true;
+
+            /* Validate username */
+            isValid = validateField(document.getElementById('adminUsername'), 'adminUsernameError', function (v) { return v.length > 0; }) && isValid;
+            isValid = validateField(document.getElementById('adminPassword'), 'adminPasswordError', function (v) { return v.length > 0; }) && isValid;
+
+            if (!isValid) return;
+
+            /* Check credentials */
+            if (username === ADMIN_USER && password === ADMIN_PASS) {
+                /* Success */
+                sessionStorage.setItem(LOGIN_SESSION_KEY, 'true');
+                if (remember) {
+                    localStorage.setItem(REMEMBER_KEY, 'true');
+                }
+                if (generalError) generalError.style.display = 'none';
+                showDashboard();
+                showToast('Welcome back, Ummy! You are now logged in.', 'success');
+
+                /* Add logout button to sidebar */
+                addLogoutButton();
+            } else {
+                /* Failure */
+                if (generalError) generalError.style.display = 'block';
+                document.getElementById('adminPassword').value = '';
+                document.getElementById('adminPassword').focus();
+                showToast('Invalid credentials. Please try again.', 'error');
+            }
+        });
+
+        /* Add logout button to sidebar settings */
+        function addLogoutButton() {
+            var settingsNav = document.querySelector('.dashboard-sidebar .sidebar-menu:last-child');
+            if (!settingsNav) return;
+
+            /* Check if logout button already exists */
+            if (document.getElementById('adminLogoutBtn')) return;
+
+            var logoutItem = document.createElement('a');
+            logoutItem.href = '#';
+            logoutItem.className = 'sidebar-link';
+            logoutItem.id = 'adminLogoutBtn';
+            logoutItem.innerHTML = '<span aria-hidden="true">🚪</span> Logout';
+            logoutItem.addEventListener('click', function (e) {
+                e.preventDefault();
+                sessionStorage.removeItem(LOGIN_SESSION_KEY);
+                localStorage.removeItem(REMEMBER_KEY);
+                showLogin();
+                document.getElementById('adminUsername').value = '';
+                document.getElementById('adminPassword').value = '';
+                showToast('You have been logged out.', 'info');
+            });
+            settingsNav.appendChild(logoutItem);
+        }
+
+        /* If already logged in, add logout button on load */
+        if (isLoggedIn || isRemembered) {
+            setTimeout(addLogoutButton, 100);
+        }
+    }
+
+    /* ==========================================================
        ESCAPE KEY - Close Modal
        ========================================================== */
     document.addEventListener('keydown', function (e) {
