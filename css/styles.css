@@ -480,27 +480,116 @@ input, textarea, select {
     flex-shrink: 0;
 }
 
-/* Google Translate container */
+/* Google Translate - hidden, replaced by custom dropdown */
 #google_translate_element {
+    display: none !important;
+}
+
+/* Custom Language Selector */
+.language-selector {
     position: relative;
 }
 
-#google_translate_element .goog-te-gadget {
-    font-size: 0 !important;
+.language-btn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    background: transparent;
+    border: 1px solid var(--border-color);
+    transition: all var(--transition-fast);
+    font-size: 16px;
+    cursor: pointer;
 }
 
-#google_translate_element .goog-te-gadget span {
+.language-btn:hover {
+    background: var(--primary-ultra-light);
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+.language-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: var(--space-sm);
+    min-width: 220px;
+    max-height: 360px;
+    overflow-y: auto;
+    z-index: 100;
+}
+
+.language-dropdown.show {
+    display: block;
+}
+
+.language-dropdown button {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-size: var(--font-size-sm);
+    text-align: left;
+    transition: background var(--transition-fast);
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.language-dropdown button:hover {
+    background: var(--primary-ultra-light);
+}
+
+.language-dropdown button.active {
+    background: var(--primary-ultra-light);
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.language-dropdown .lang-flag {
+    font-size: 16px;
+    width: 20px;
+    text-align: center;
+}
+
+.language-dropdown .lang-name {
+    flex: 1;
+}
+
+.language-dropdown .lang-check {
+    color: var(--primary);
+    font-weight: 700;
     display: none;
 }
 
-#google_translate_element select {
-    padding: 6px 10px;
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
-    background: var(--bg-card);
-    color: var(--text-primary);
-    font-size: var(--font-size-xs);
-    cursor: pointer;
+.language-dropdown button.active .lang-check {
+    display: inline;
+}
+
+/* Scrollbar for language dropdown */
+.language-dropdown::-webkit-scrollbar {
+    width: 6px;
+}
+
+.language-dropdown::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.language-dropdown::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 3px;
 }
 
 /* ============================================================

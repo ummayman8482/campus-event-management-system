@@ -50,7 +50,35 @@
                         <button role="menuitem" id="voiceStop" aria-label="Stop reading">⏹ Stop</button>
                     </div>
                 </div>
-                <div id="google_translate_element" aria-label="Language translation"></div>
+                <!-- Custom Language Selector -->
+                <div class="language-selector">
+                    <button class="language-btn" id="langToggle" aria-label="Change language" aria-expanded="false" title="Change language">🌐</button>
+                    <div class="language-dropdown" id="langDropdown" role="menu" aria-label="Select language">
+                        <button role="menuitem" data-lang="en" class="active"><span class="lang-flag">🇬🇧</span><span class="lang-name">English</span><span class="lang-check">✓</span></button>
+                        <button role="menuitem" data-lang="es"><span class="lang-flag">🇪🇸</span><span class="lang-name">Español</span><span class="lang-check">✓</span></button>
+                        <button role="menuitem" data-lang="fr"><span class="lang-flag">🇫🇷</span><span class="lang-name">Français</span><span class="lang-check">✓</span></button>
+                        <button role="menuitem" data-lang="de"><span class="lang-flag">🇩🇪</span><span class="lang-name">Deutsch</span><span class="lang-check">✓</span></button>
+                        <button role="menuitem" data-lang="pt"><span class="lang-flag">🇧🇷</span><span class="lang-name">Português</span><span class="lang-check">✓</span></button>
+                        <button role="menuitem" data-lang="it"><span class="lang-flag">🇮🇹</span><span class="lang-name">Italiano</span><span class="lang-check">✓</span></button>
+                        <button role="menuitem" data-lang="nl"><span class="lang-flag">🇳🇱</span><span class="lang-name">Nederlands</span><span class="lang-check">✓</span></button>
+                        <button role="menuitem" data-lang="ru"><span class="lang-flag">🇷🇺</span><span class="lang-name">Русский</span><span class="lang-check">✓</span></button>
+                        <button role="menuitem" data-lang="zh"><span class="lang-flag">🇨🇳</span><span class="lang-name">中文</span><span class="lang-check">✓</span></button>
+                        <button role="menuitem" data-lang="ja"><span class="lang-flag">🇯🇵</span><span class="lang-name">日本語</span><span class="lang-check">✓</span></button>
+                        <button role="menuitem" data-lang="ko"><span class="lang-flag">🇰🇷</span><span class="lang-name">한국어</span><span class="lang-check">✓</span></button>
+                        <button role="menuitem" data-lang="ar"><span class="lang-flag">🇸🇦</span><span class="lang-name">العربية</span><span class="lang-check">✓</span></button>
+                        <button role="menuitem" data-lang="hi"><span class="lang-flag">🇮🇳</span><span class="lang-name">हिन्दी</span><span class="lang-check">✓</span></button>
+                        <button role="menuitem" data-lang="th"><span class="lang-flag">🇹🇭</span><span class="lang-name">ไทย</span><span class="lang-check">✓</span></button>
+                        <button role="menuitem" data-lang="vi"><span class="lang-flag">🇻🇳</span><span class="lang-name">Tiếng Việt</span><span class="lang-check">✓</span></button>
+                        <button role="menuitem" data-lang="id"><span class="lang-flag">🇮🇩</span><span class="lang-name">Bahasa Indonesia</span><span class="lang-check">✓</span></button>
+                        <button role="menuitem" data-lang="ms"><span class="lang-flag">🇲🇾</span><span class="lang-name">Bahasa Melayu</span><span class="lang-check">✓</span></button>
+                        <button role="menuitem" data-lang="tr"><span class="lang-flag">🇹🇷</span><span class="lang-name">Türkçe</span><span class="lang-check">✓</span></button>
+                        <button role="menuitem" data-lang="pl"><span class="lang-flag">🇵🇱</span><span class="lang-name">Polski</span><span class="lang-check">✓</span></button>
+                        <button role="menuitem" data-lang="sv"><span class="lang-flag">🇸🇪</span><span class="lang-name">Svenska</span><span class="lang-check">✓</span></button>
+                        <button role="menuitem" data-lang="sw"><span class="lang-flag">🇰🇪</span><span class="lang-name">Kiswahili</span><span class="lang-check">✓</span></button>
+                        <button role="menuitem" data-lang="bn"><span class="lang-flag">🇧🇩</span><span class="lang-name">বাংলা</span><span class="lang-check">✓</span></button>
+                        <button role="menuitem" data-lang="ur"><span class="lang-flag">🇵🇰</span><span class="lang-name">اردو</span><span class="lang-check">✓</span></button>
+                    </div>
+                </div>
                 <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
                     <span></span><span></span><span></span>
                 </button>

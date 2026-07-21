@@ -332,25 +332,140 @@
     }
 
     /* ==========================================================
-       GOOGLE TRANSLATE INITIALIZATION
+       GOOGLE TRANSLATE STUB
+       The Google Translate script calls this callback on load.
+       We use a cookie-based approach instead of the widget,
+       so this is intentionally empty.
        ========================================================== */
-    /* This function is called by the Google Translate script */
-    window.googleTranslateElementInit = function () {
+    window.googleTranslateElementInit = function () { /* no-op */ };
+
+    /* ==========================================================
+       CUSTOM LANGUAGE SELECTOR
+       ========================================================== */
+    var LANG_KEY = 'cems_lang';
+    var langToggle = document.getElementById('langToggle');
+    var langDropdown = document.getElementById('langDropdown');
+
+    /**
+     * Toggle the language dropdown open/closed
+     */
+    function toggleLangDropdown() {
+        var isExpanded = langToggle.getAttribute('aria-expanded') === 'true';
+        langToggle.setAttribute('aria-expanded', String(!isExpanded));
+        langDropdown.classList.toggle('show');
+    }
+
+    /**
+     * Set a cookie
+     * @param {string} name
+     * @param {string} value
+     * @param {number} days
+     */
+    function setCookie(name, value, days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        document.cookie = name + '=' + value + ';expires=' + date.toUTCString() + ';path=/';
+    }
+
+    /**
+     * Read a cookie by name
+     * @param {string} name
+     * @returns {string|null}
+     */
+    function getCookie(name) {
+        var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+        return match ? match[2] : null;
+    }
+
+    /**
+     * Translate the page to the given language using Google Translate cookie
+     * @param {string} lang - Target language code (e.g. 'en', 'fr', 'ar')
+     */
+    function translatePage(lang) {
+        /* Remove the googtrans cookie first to reset */
+        setCookie('googtrans', '', 365);
+
+        if (lang !== 'en') {
+            /* Set the Google Translate cookie to trigger translation */
+            setCookie('googtrans', '/en/' + lang, 365);
+        }
+
+        /* Save preference */
         try {
-            new google.translate.TranslateElement({
-                pageLanguage: 'en',
-                includedLanguages: 'en,es,fr,de,zh,ar,hi,ja,ko,pt,ru,it,nl,sv,pl,tr,vi,th,id,ms',
-                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-                autoDisplay: false
-            }, 'google_translate_element');
-        } catch (e) {
-            /* Google Translate script may not have loaded */
-            var container = document.getElementById('google_translate_element');
-            if (container) {
-                container.innerHTML = '<select aria-label="Language translation" style="padding:6px 10px;border:1px solid var(--border-color);border-radius:var(--radius-md);background:var(--bg-card);color:var(--text-primary);font-size:12px;cursor:pointer;"><option value="en">English</option><option value="es">Español</option><option value="fr">Français</option><option value="de">Deutsch</option><option value="ar">العربية</option><option value="hi">हिन्दी</option><option value="zh">中文</option><option value="ja">日本語</option><option value="ko">한국어</option><option value="pt">Português</option></select>';
+            localStorage.setItem(LANG_KEY, lang);
+        } catch (e) { /* ignore */ }
+
+        /* Reload to apply the translation */
+        location.reload();
+    }
+
+    /**
+     * Update the active state of language buttons
+     * @param {string} activeLang
+     */
+    function setActiveLang(activeLang) {
+        var buttons = langDropdown.querySelectorAll('[data-lang]');
+        buttons.forEach(function (btn) {
+            if (btn.getAttribute('data-lang') === activeLang) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+    }
+
+    /* Bind language toggle button */
+    if (langToggle) {
+        langToggle.addEventListener('click', toggleLangDropdown);
+    }
+
+    /* Bind language dropdown button clicks */
+    if (langDropdown) {
+        langDropdown.querySelectorAll('[data-lang]').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var lang = btn.getAttribute('data-lang');
+                translatePage(lang);
+            });
+        });
+    }
+
+    /* Close language dropdown when clicking outside */
+    document.addEventListener('click', function (e) {
+        if (langDropdown && langDropdown.classList.contains('show')) {
+            var wrapper = document.querySelector('.language-selector');
+            if (wrapper && !wrapper.contains(e.target)) {
+                langDropdown.classList.remove('show');
+                langToggle.setAttribute('aria-expanded', 'false');
             }
         }
-    };
+    });
+
+    /* Escape key closes language dropdown */
+    (function () {
+        var existingHandler = document.addEventListener;
+        /* We add language close to the existing Escape handler below */
+    })();
+
+    /* Load saved language on page load */
+    (function initLanguage() {
+        var savedLang = null;
+        try {
+            savedLang = localStorage.getItem(LANG_KEY);
+        } catch (e) { /* ignore */ }
+
+        /* Check the Google Translate cookie too */
+        var googTrans = getCookie('googtrans');
+        if (googTrans) {
+            var parts = googTrans.split('/');
+            if (parts.length === 3) {
+                savedLang = parts[2];
+            }
+        }
+
+        if (savedLang && langDropdown) {
+            setActiveLang(savedLang);
+        }
+    })();
 
     /* ==========================================================
        KEYBOARD ACCESSIBILITY ENHANCEMENTS
@@ -369,10 +484,17 @@
     /* Escape key closes dropdowns and modals */
     document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') {
+            /* Close voice dropdown */
             if (voiceDropdown && voiceDropdown.classList.contains('show')) {
                 voiceDropdown.classList.remove('show');
                 voiceToggle.setAttribute('aria-expanded', 'false');
                 voiceToggle.focus();
+            }
+            /* Close language dropdown */
+            if (langDropdown && langDropdown.classList.contains('show')) {
+                langDropdown.classList.remove('show');
+                langToggle.setAttribute('aria-expanded', 'false');
+                langToggle.focus();
             }
         }
     });
