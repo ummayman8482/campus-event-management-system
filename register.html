@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Register for campus events through the CEMS registration form.">
+    <title>Register - CEMS</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <div class="mobile-overlay" id="mobileOverlay" aria-hidden="true"></div>
+
+    <!-- Header -->
+    <header class="header" role="banner">
+        <div class="container">
+            <a href="index.html" class="logo" aria-label="CEMS Home">
+                <div class="logo-icon" aria-hidden="true">C</div>
+                <span>CEMS</span>
+            </a>
+            <nav class="nav-menu" id="navMenu" role="navigation" aria-label="Main navigation">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="events.html" class="nav-link">Events</a>
+                <a href="register.html" class="nav-link active" aria-current="page">Register</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+                <a href="admin.html" class="nav-link">Admin</a>
+            </nav>
+            <div class="header-actions">
+                <div class="font-size-controls" role="group" aria-label="Font size controls">
+                    <button class="a11y-btn" id="fontDecrease" aria-label="Decrease font size" title="Decrease font size (A-)">A-</button>
+                    <button class="a11y-btn" id="fontIncrease" aria-label="Increase font size" title="Increase font size (A+)">A+</button>
+                </div>
+                <button class="a11y-btn" id="themeToggle" aria-label="Toggle dark mode" aria-pressed="false" title="Toggle dark/light mode">
+                    <span class="theme-toggle-icon" aria-hidden="true">🌙</span>
+                </button>
+                <div class="voice-reader-wrapper">
+                    <button class="a11y-btn" id="voiceToggle" aria-label="Voice reader" aria-expanded="false" title="Screen reader options">🔊</button>
+                    <div class="voice-dropdown" id="voiceDropdown" role="menu" aria-label="Voice reader options">
+                        <button role="menuitem" id="voiceRead" aria-label="Read page aloud">▶ Read</button>
+                        <button role="menuitem" id="voicePause" aria-label="Pause reading">⏸ Pause</button>
+                        <button role="menuitem" id="voiceResume" aria-label="Resume reading">⏯ Resume</button>
+                        <button role="menuitem" id="voiceStop" aria-label="Stop reading">⏹ Stop</button>
+                    </div>
+                </div>
+                <div id="google_translate_element" aria-label="Language translation"></div>
+                <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content" class="main-content" role="main">
+
+        <!-- Page Header -->
+        <section class="page-header">
+            <div class="container">
+                <h1 class="page-header-title animate-on-scroll">Event Registration</h1>
+                <p class="page-header-subtitle animate-on-scroll">Fill out the form below to register for an upcoming campus event.</p>
+                <nav class="breadcrumb" aria-label="Breadcrumb">
+                    <a href="index.html">Home</a>
+                    <span aria-hidden="true">/</span>
+                    <span class="current" aria-current="page">Register</span>
+                </nav>
+            </div>
+        </section>
+
+        <!-- Registration Form Section -->
+        <section class="section" aria-labelledby="registration-form-heading">
+            <div class="container">
+                <div class="contact-grid">
+                    <!-- Registration Form -->
+                    <div class="contact-form-card animate-on-scroll" id="registrationFormCard">
+                        <h2 id="registration-form-heading">Register for an Event</h2>
+                        <p>Please fill in your details below. Fields marked with <span style="color: var(--danger);">*</span> are required.</p>
+
+                        <form id="registrationForm" novalidate>
+                            <!-- Personal Information -->
+                            <h3 style="font-size: var(--font-size-md); font-weight: 700; margin: var(--space-lg) 0 var(--space-md); color: var(--text-primary);">Personal Information</h3>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label" for="regFirstName">First Name <span class="required" aria-label="required">*</span></label>
+                                    <input type="text" class="form-input" id="regFirstName" name="firstName" placeholder="Enter your first name" required aria-required="true">
+                                    <div class="form-error" id="regFirstNameError">Please enter your first name.</div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="regLastName">Last Name <span class="required" aria-label="required">*</span></label>
+                                    <input type="text" class="form-input" id="regLastName" name="lastName" placeholder="Enter your last name" required aria-required="true">
+                                    <div class="form-error" id="regLastNameError">Please enter your last name.</div>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label" for="regEmail">Email Address <span class="required" aria-label="required">*</span></label>
+                                    <input type="email" class="form-input" id="regEmail" name="email" placeholder="your.email@university.edu" required aria-required="true">
+                                    <div class="form-error" id="regEmailError">Please enter a valid email address.</div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="regPhone">Phone Number <span class="required" aria-label="required">*</span></label>
+                                    <input type="tel" class="form-input" id="regPhone" name="phone" placeholder="+1 (555) 000-0000" required aria-required="true">
+                                    <div class="form-error" id="regPhoneError">Please enter a valid phone number.</div>
+                                </div>
+                            </div>
+
+                            <!-- Academic Information -->
+                            <h3 style="font-size: var(--font-size-md); font-weight: 700; margin: var(--space-lg) 0 var(--space-md); color: var(--text-primary);">Academic Information</h3>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label" for="regStudentId">Student ID <span class="required" aria-label="required">*</span></label>
+                                    <input type="text" class="form-input" id="regStudentId" name="studentId" placeholder="e.g., STU-2026-001" required aria-required="true">
+                                    <div class="form-error" id="regStudentIdError">Please enter your student ID.</div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="regDepartment">Department <span class="required" aria-label="required">*</span></label>
+                                    <select class="form-select" id="regDepartment" name="department" required aria-required="true">
+                                        <option value="">Select your department</option>
+                                        <option value="Computer Science">Computer Science</option>
+                                        <option value="Engineering">Engineering</option>
+                                        <option value="Business">Business Administration</option>
+                                        <option value="Arts">Arts & Humanities</option>
+                                        <option value="Science">Natural Sciences</option>
+                                        <option value="Medicine">Medicine</option>
+                                        <option value="Law">Law</option>
+                                        <option value="Education">Education</option>
+                                        <option value="Social Sciences">Social Sciences</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                    <div class="form-error" id="regDepartmentError">Please select your department.</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="regYear">Year of Study <span class="required" aria-label="required">*</span></label>
+                                <select class="form-select" id="regYear" name="year" required aria-required="true">
+                                    <option value="">Select your year</option>
+                                    <option value="1">1st Year (Freshman)</option>
+                                    <option value="2">2nd Year (Sophomore)</option>
+                                    <option value="3">3rd Year (Junior)</option>
+                                    <option value="4">4th Year (Senior)</option>
+                                    <option value="5+">5th Year or Above</option>
+                                    <option value="PG">Postgraduate</option>
+                                    <option value="PhD">PhD Student</option>
+                                </select>
+                                <div class="form-error" id="regYearError">Please select your year of study.</div>
+                            </div>
+
+                            <!-- Event Selection -->
+                            <h3 style="font-size: var(--font-size-md); font-weight: 700; margin: var(--space-lg) 0 var(--space-md); color: var(--text-primary);">Event Selection</h3>
+
+                            <div class="form-group">
+                                <label class="form-label" for="regEvent">Select Event <span class="required" aria-label="required">*</span></label>
+                                <select class="form-select" id="regEvent" name="event" required aria-required="true">
+                                    <option value="">Choose an event</option>
+                                    <option value="tech-summit">Annual Tech Summit 2026 - March 15</option>
+                                    <option value="art-exhibition">Student Art Exhibition - April 2</option>
+                                    <option value="sports-tournament">Inter-Dept Sports Tournament - May 10</option>
+                                    <option value="career-fair">Spring Career Fair - March 28</option>
+                                    <option value="python-workshop">Python Programming Workshop - Feb-Mar</option>
+                                    <option value="music-night">Campus Music Night - April 20</option>
+                                    <option value="hackathon">24-Hour Hackathon - May 5</option>
+                                    <option value="yoga-workshop">Mindfulness & Yoga Workshop - March 22</option>
+                                </select>
+                                <div class="form-error" id="regEventError">Please select an event.</div>
+                            </div>
+
+                            <!-- Dietary / Special Requirements -->
+                            <div class="form-group">
+                                <label class="form-label" for="regRequirements">Special Requirements</label>
+                                <textarea class="form-textarea" id="regRequirements" name="requirements" placeholder="Any dietary restrictions, accessibility needs, or other requirements..." rows="3"></textarea>
+                                <div class="form-hint">Optional. Let us know if you need any accommodations.</div>
+                            </div>
+
+                            <!-- Terms & Conditions -->
+                            <div class="form-group">
+                                <label class="form-check">
+                                    <input type="checkbox" id="regTerms" name="terms" required aria-required="true">
+                                    <span class="form-check-label">I agree to the <a href="#" style="text-decoration: underline;">Terms & Conditions</a> and <a href="#" style="text-decoration: underline;">Privacy Policy</a> <span class="required" aria-label="required">*</span></span>
+                                </label>
+                                <div class="form-error" id="regTermsError">You must agree to the terms and conditions.</div>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;" id="regSubmitBtn">
+                                Complete Registration
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Registration Info Sidebar -->
+                    <div class="animate-on-scroll">
+                        <div class="card" style="margin-bottom: var(--space-xl);">
+                            <h3 style="font-size: var(--font-size-lg); font-weight: 700; margin-bottom: var(--space-md);">📋 Registration Info</h3>
+                            <p style="font-size: var(--font-size-sm); color: var(--text-secondary); line-height: 1.7; margin-bottom: var(--space-md);">After submitting your registration, you will receive a confirmation email with your registration details and a QR code for check-in.</p>
+                            <ul style="font-size: var(--font-size-sm); color: var(--text-secondary); display: flex; flex-direction: column; gap: var(--space-sm);">
+                                <li>✅ Instant confirmation via email</li>
+                                <li>✅ QR code for event check-in</li>
+                                <li>✅ Event reminders 24 hours before</li>
+                                <li>✅ Free cancellation up to 48 hours before</li>
+                                <li>✅ Access to event materials and resources</li>
+                            </ul>
+                        </div>
+
+                        <div class="card" style="margin-bottom: var(--space-xl);">
+                            <h3 style="font-size: var(--font-size-lg); font-weight: 700; margin-bottom: var(--space-md);">🎯 Who Can Register?</h3>
+                            <p style="font-size: var(--font-size-sm); color: var(--text-secondary); line-height: 1.7;">All currently enrolled university students, faculty members, and staff are eligible to register for campus events. Some events may have additional prerequisites or limited capacity.</p>
+                        </div>
+
+                        <div class="card">
+                            <h3 style="font-size: var(--font-size-lg); font-weight: 700; margin-bottom: var(--space-md);">❓ Need Help?</h3>
+                            <p style="font-size: var(--font-size-sm); color: var(--text-secondary); line-height: 1.7; margin-bottom: var(--space-md);">If you encounter any issues during registration, please don't hesitate to reach out.</p>
+                            <a href="contact.html" class="btn btn-outline btn-sm">Contact Support</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Registration Confirmation (Hidden by default) -->
+        <div id="registrationConfirmation" style="display: none;">
+            <section class="section">
+                <div class="container">
+                    <div class="confirmation-card animate-on-scroll">
+                        <div class="confirmation-icon" aria-hidden="true">✓</div>
+                        <h2>Registration Successful!</h2>
+                        <p>Your event registration has been confirmed. A confirmation email has been sent to your inbox.</p>
+
+                        <div class="confirmation-details" id="confirmationDetails">
+                            <!-- Populated dynamically by JavaScript -->
+                        </div>
+
+                        <div style="display: flex; gap: var(--space-md); justify-content: center; flex-wrap: wrap;">
+                            <a href="events.html" class="btn btn-primary">Browse More Events</a>
+                            <a href="index.html" class="btn btn-outline">Back to Home</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo" style="color: #fff;">
+                        <div class="logo-icon" aria-hidden="true">C</div>
+                        <span>CEMS</span>
+                    </a>
+                    <p>Your one-stop campus event management platform.</p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="Facebook">📘</a>
+                        <a href="#" aria-label="Twitter">🐦</a>
+                        <a href="#" aria-label="Instagram">📷</a>
+                        <a href="#" aria-label="LinkedIn">💼</a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="events.html">Events</a></li>
+                        <li><a href="register.html">Register</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Events</h4>
+                    <ul>
+                        <li><a href="events.html">All Events</a></li>
+                        <li><a href="#">Workshops</a></li>
+                        <li><a href="#">Seminars</a></li>
+                        <li><a href="#">Sports</a></li>
+                        <li><a href="#">Cultural</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="contact.html">Help Center</a></li>
+                        <li><a href="#">FAQs</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="admin.html">Admin Portal</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 CEMS - Campus Event Management System. All rights reserved.</p>
+                <div class="footer-bottom-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Accessibility</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+
+    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script src="js/accessibility.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

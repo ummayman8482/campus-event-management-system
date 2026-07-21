@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="About CEMS - Learn about our mission, vision, and the team behind the Campus Event Management System.">
+    <title>About Us - CEMS</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <div class="mobile-overlay" id="mobileOverlay" aria-hidden="true"></div>
+
+    <!-- Header -->
+    <header class="header" role="banner">
+        <div class="container">
+            <a href="index.html" class="logo" aria-label="CEMS Home">
+                <div class="logo-icon" aria-hidden="true">C</div>
+                <span>CEMS</span>
+            </a>
+            <nav class="nav-menu" id="navMenu" role="navigation" aria-label="Main navigation">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="about.html" class="nav-link active" aria-current="page">About</a>
+                <a href="events.html" class="nav-link">Events</a>
+                <a href="register.html" class="nav-link">Register</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+                <a href="admin.html" class="nav-link">Admin</a>
+            </nav>
+            <div class="header-actions">
+                <div class="font-size-controls" role="group" aria-label="Font size controls">
+                    <button class="a11y-btn" id="fontDecrease" aria-label="Decrease font size" title="Decrease font size (A-)">A-</button>
+                    <button class="a11y-btn" id="fontIncrease" aria-label="Increase font size" title="Increase font size (A+)">A+</button>
+                </div>
+                <button class="a11y-btn" id="themeToggle" aria-label="Toggle dark mode" aria-pressed="false" title="Toggle dark/light mode">
+                    <span class="theme-toggle-icon" aria-hidden="true">🌙</span>
+                </button>
+                <div class="voice-reader-wrapper">
+                    <button class="a11y-btn" id="voiceToggle" aria-label="Voice reader" aria-expanded="false" title="Screen reader options">🔊</button>
+                    <div class="voice-dropdown" id="voiceDropdown" role="menu" aria-label="Voice reader options">
+                        <button role="menuitem" id="voiceRead" aria-label="Read page aloud">▶ Read</button>
+                        <button role="menuitem" id="voicePause" aria-label="Pause reading">⏸ Pause</button>
+                        <button role="menuitem" id="voiceResume" aria-label="Resume reading">⏯ Resume</button>
+                        <button role="menuitem" id="voiceStop" aria-label="Stop reading">⏹ Stop</button>
+                    </div>
+                </div>
+                <div id="google_translate_element" aria-label="Language translation"></div>
+                <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content" class="main-content" role="main">
+
+        <!-- Page Header -->
+        <section class="page-header">
+            <div class="container">
+                <h1 class="page-header-title animate-on-scroll">About CEMS</h1>
+                <p class="page-header-subtitle animate-on-scroll">Empowering campus communities through seamless event management.</p>
+                <nav class="breadcrumb" aria-label="Breadcrumb">
+                    <a href="index.html">Home</a>
+                    <span aria-hidden="true">/</span>
+                    <span class="current" aria-current="page">About</span>
+                </nav>
+            </div>
+        </section>
+
+        <!-- About Content -->
+        <section class="section" aria-labelledby="about-story-heading">
+            <div class="container">
+                <div class="about-grid">
+                    <div class="about-image animate-on-scroll" aria-hidden="true">🏫</div>
+                    <div class="about-content animate-on-scroll">
+                        <h2 id="about-story-heading">Our Story</h2>
+                        <p>The Campus Event Management System (CEMS) was born from a simple observation: organizing and attending campus events shouldn't be complicated. Founded in 2024 by a group of passionate computer science students, CEMS has grown into the university's central hub for all event-related activities.</p>
+                        <p>We noticed that students often missed out on exciting events simply because information was scattered across notice boards, email chains, and social media groups. Our mission was to create a single, accessible platform that brings all campus events together in one place.</p>
+                        <p>Today, CEMS serves over 5,000 students across 30+ departments, hosting everything from academic seminars and career fairs to cultural festivals and sports tournaments.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mission, Vision, Values -->
+        <section class="section" style="background: var(--bg-primary);" aria-labelledby="mission-heading">
+            <div class="container">
+                <h2 id="mission-heading" class="section-title animate-on-scroll">Our Foundation</h2>
+                <p class="section-subtitle animate-on-scroll">Guided by principles that put students first.</p>
+
+                <div class="mission-grid">
+                    <div class="mission-card animate-on-scroll">
+                        <div class="mission-card-icon" aria-hidden="true">🎯</div>
+                        <h3>Our Mission</h3>
+                        <p>To streamline campus event management by providing an intuitive, accessible, and comprehensive platform that connects students with the events that shape their university experience.</p>
+                    </div>
+                    <div class="mission-card animate-on-scroll">
+                        <div class="mission-card-icon" aria-hidden="true">🔭</div>
+                        <h3>Our Vision</h3>
+                        <p>To become the leading campus event platform adopted by universities worldwide, fostering vibrant campus communities through technology and seamless event coordination.</p>
+                    </div>
+                    <div class="mission-card animate-on-scroll">
+                        <div class="mission-card-icon" aria-hidden="true">💎</div>
+                        <h3>Our Values</h3>
+                        <p>Innovation, accessibility, and community are at the heart of everything we build. We believe every student deserves equal access to campus life, regardless of ability or background.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Key Features -->
+        <section class="section" aria-labelledby="features-heading">
+            <div class="container">
+                <h2 id="features-heading" class="section-title animate-on-scroll">What Makes Us Different</h2>
+                <p class="section-subtitle animate-on-scroll">Built with HCI principles and accessibility at the core.</p>
+
+                <div class="features-grid">
+                    <div class="feature-card animate-on-scroll">
+                        <div class="feature-icon" aria-hidden="true">🎨</div>
+                        <h3>User-Centered Design</h3>
+                        <p>Every interface decision is backed by HCI research, ensuring intuitive navigation, clear feedback, and minimal cognitive load for all users.</p>
+                    </div>
+                    <div class="feature-card animate-on-scroll">
+                        <div class="feature-icon" aria-hidden="true">♿</div>
+                        <h3>Universal Accessibility</h3>
+                        <p>WCAG-compliant with adjustable fonts, dark mode, screen readers, keyboard navigation, and multi-language support through Google Translate.</p>
+                    </div>
+                    <div class="feature-card animate-on-scroll">
+                        <div class="feature-icon" aria-hidden="true">📱</div>
+                        <h3>Responsive by Default</h3>
+                        <p>Seamless experience across desktops, tablets, and smartphones with fluid layouts and adaptive components.</p>
+                    </div>
+                    <div class="feature-card animate-on-scroll">
+                        <div class="feature-icon" aria-hidden="true">⚡</div>
+                        <h3>Real-Time Updates</h3>
+                        <p>Live seat availability, instant registration confirmations, and real-time dashboard analytics for administrators.</p>
+                    </div>
+                    <div class="feature-card animate-on-scroll">
+                        <div class="feature-icon" aria-hidden="true">🔒</div>
+                        <h3>Secure & Private</h3>
+                        <p>Enterprise-grade data protection with encrypted storage, secure authentication, and strict privacy controls.</p>
+                    </div>
+                    <div class="feature-card animate-on-scroll">
+                        <div class="feature-icon" aria-hidden="true">🔧</div>
+                        <h3>Admin Dashboard</h3>
+                        <p>Powerful management tools with data tables, search, filtering, and export capabilities for efficient event oversight.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Team Section -->
+        <section class="section" style="background: var(--bg-primary);" aria-labelledby="team-heading">
+            <div class="container">
+                <h2 id="team-heading" class="section-title animate-on-scroll">Meet Our Team</h2>
+                <p class="section-subtitle animate-on-scroll">The talented students behind CEMS.</p>
+
+                <div class="team-grid">
+                    <div class="team-card animate-on-scroll">
+                        <div class="team-avatar" aria-hidden="true">👨‍💻</div>
+                        <h3>Ahmad Rahman</h3>
+                        <div class="role">Project Lead & Backend Developer</div>
+                        <p>Computer Science student with a passion for building scalable web applications and leading tech teams.</p>
+                    </div>
+                    <div class="team-card animate-on-scroll">
+                        <div class="team-avatar" aria-hidden="true">👩‍🎨</div>
+                        <h3>Sara Mitchell</h3>
+                        <div class="role">UI/UX Designer</div>
+                        <p>Human-Interaction Computing specialist focused on creating accessible and beautiful user experiences.</p>
+                    </div>
+                    <div class="team-card animate-on-scroll">
+                        <div class="team-avatar" aria-hidden="true">👨‍💼</div>
+                        <h3>James Okoye</h3>
+                        <div class="role">Frontend Developer</div>
+                        <p>Full-stack developer with expertise in modern JavaScript frameworks and responsive design patterns.</p>
+                    </div>
+                    <div class="team-card animate-on-scroll">
+                        <div class="team-avatar" aria-hidden="true">👩‍🔬</div>
+                        <h3>Priya Sharma</h3>
+                        <div class="role">QA & Accessibility Tester</div>
+                        <p>Dedicated to ensuring CEMS meets the highest standards of quality, usability, and accessibility compliance.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="section" aria-labelledby="about-cta-heading">
+            <div class="container text-center">
+                <h2 id="about-cta-heading" class="section-title animate-on-scroll">Want to Learn More?</h2>
+                <p class="section-subtitle animate-on-scroll">Have questions or want to collaborate? We'd love to hear from you.</p>
+                <div class="animate-on-scroll" style="display: flex; gap: var(--space-md); justify-content: center; flex-wrap: wrap;">
+                    <a href="contact.html" class="btn btn-primary btn-lg">Get in Touch</a>
+                    <a href="events.html" class="btn btn-outline btn-lg">Browse Events</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo" style="color: #fff;">
+                        <div class="logo-icon" aria-hidden="true">C</div>
+                        <span>CEMS</span>
+                    </a>
+                    <p>Your one-stop campus event management platform. Discover, register, and stay connected with everything happening at your university.</p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="Facebook">📘</a>
+                        <a href="#" aria-label="Twitter">🐦</a>
+                        <a href="#" aria-label="Instagram">📷</a>
+                        <a href="#" aria-label="LinkedIn">💼</a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="events.html">Events</a></li>
+                        <li><a href="register.html">Register</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Events</h4>
+                    <ul>
+                        <li><a href="events.html">All Events</a></li>
+                        <li><a href="#">Workshops</a></li>
+                        <li><a href="#">Seminars</a></li>
+                        <li><a href="#">Sports</a></li>
+                        <li><a href="#">Cultural</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="contact.html">Help Center</a></li>
+                        <li><a href="#">FAQs</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="admin.html">Admin Portal</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 CEMS - Campus Event Management System. All rights reserved.</p>
+                <div class="footer-bottom-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Accessibility</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+
+    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script src="js/accessibility.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

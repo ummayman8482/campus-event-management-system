@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Campus Event Management System - Discover, register, and manage university events all in one place.">
+    <meta name="keywords" content="campus events, university, registration, student activities">
+    <title>CEMS - Campus Event Management System</title>
+
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Skip to Main Content - Accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Mobile Overlay -->
+    <div class="mobile-overlay" id="mobileOverlay" aria-hidden="true"></div>
+
+    <!-- ============================================================
+         HEADER & NAVIGATION
+         ============================================================ -->
+    <header class="header" role="banner">
+        <div class="container">
+            <!-- Logo -->
+            <a href="index.html" class="logo" aria-label="CEMS Home">
+                <div class="logo-icon" aria-hidden="true">C</div>
+                <span>CEMS</span>
+            </a>
+
+            <!-- Main Navigation -->
+            <nav class="nav-menu" id="navMenu" role="navigation" aria-label="Main navigation">
+                <a href="index.html" class="nav-link active" aria-current="page">Home</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="events.html" class="nav-link">Events</a>
+                <a href="register.html" class="nav-link">Register</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+                <a href="admin.html" class="nav-link">Admin</a>
+            </nav>
+
+            <!-- Header Actions / Accessibility Toolbar -->
+            <div class="header-actions">
+                <!-- Font Size Controls -->
+                <div class="font-size-controls" role="group" aria-label="Font size controls">
+                    <button class="a11y-btn" id="fontDecrease" aria-label="Decrease font size" title="Decrease font size (A-)">A-</button>
+                    <button class="a11y-btn" id="fontIncrease" aria-label="Increase font size" title="Increase font size (A+)">A+</button>
+                </div>
+
+                <!-- Dark/Light Mode Toggle -->
+                <button class="a11y-btn" id="themeToggle" aria-label="Toggle dark mode" aria-pressed="false" title="Toggle dark/light mode">
+                    <span class="theme-toggle-icon" aria-hidden="true">🌙</span>
+                </button>
+
+                <!-- Voice Reader -->
+                <div class="voice-reader-wrapper">
+                    <button class="a11y-btn" id="voiceToggle" aria-label="Voice reader" aria-expanded="false" title="Screen reader options">
+                        🔊
+                    </button>
+                    <div class="voice-dropdown" id="voiceDropdown" role="menu" aria-label="Voice reader options">
+                        <button role="menuitem" id="voiceRead" aria-label="Read page aloud">▶ Read</button>
+                        <button role="menuitem" id="voicePause" aria-label="Pause reading">⏸ Pause</button>
+                        <button role="menuitem" id="voiceResume" aria-label="Resume reading">⏯ Resume</button>
+                        <button role="menuitem" id="voiceStop" aria-label="Stop reading">⏹ Stop</button>
+                    </div>
+                </div>
+
+                <!-- Google Translate -->
+                <div id="google_translate_element" aria-label="Language translation"></div>
+
+                <!-- Hamburger Menu (Mobile) -->
+                <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ============================================================
+         MAIN CONTENT
+         ============================================================ -->
+    <main id="main-content" class="main-content" role="main">
+
+        <!-- Hero Section -->
+        <section class="hero" aria-label="Welcome hero section">
+            <div class="container">
+                <div class="hero-content">
+                    <!-- Badge -->
+                    <div class="hero-badge">
+                        <span class="hero-badge-dot" aria-hidden="true"></span>
+                        University Events Hub 2026
+                    </div>
+
+                    <!-- Title -->
+                    <h1 class="hero-title">
+                        Discover & Join
+                        <span class="gradient-text">Campus Events</span>
+                        That Matter
+                    </h1>
+
+                    <!-- Description -->
+                    <p class="hero-description">
+                        Your one-stop platform for exploring, registering, and managing university events.
+                        From workshops to conferences, never miss what's happening on campus.
+                    </p>
+
+                    <!-- Call to Action Buttons -->
+                    <div class="hero-buttons">
+                        <a href="events.html" class="btn btn-primary btn-lg">Explore Events</a>
+                        <a href="register.html" class="btn btn-secondary btn-lg">Register Now</a>
+                    </div>
+
+                    <!-- Stats -->
+                    <div class="hero-stats">
+                        <div class="hero-stat">
+                            <div class="hero-stat-number">150+</div>
+                            <div class="hero-stat-label">Events Hosted</div>
+                        </div>
+                        <div class="hero-stat">
+                            <div class="hero-stat-number">5,000+</div>
+                            <div class="hero-stat-label">Students Registered</div>
+                        </div>
+                        <div class="hero-stat">
+                            <div class="hero-stat-number">30+</div>
+                            <div class="hero-stat-label">Departments</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hero Floating Visual -->
+                <div class="hero-visual" aria-hidden="true">
+                    <div class="hero-card">
+                        <div class="hero-card-title">🎤 Annual Tech Summit 2026</div>
+                        <div class="hero-card-meta">March 15, 2026 • Main Auditorium</div>
+                    </div>
+                    <div class="hero-card">
+                        <div class="hero-card-title">🎨 Art Exhibition</div>
+                        <div class="hero-card-meta">April 2, 2026 • Gallery Hall</div>
+                    </div>
+                    <div class="hero-card">
+                        <div class="hero-card-title">⚽ Sports Tournament</div>
+                        <div class="hero-card-meta">May 10, 2026 • Sports Complex</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="section" aria-labelledby="features-heading">
+            <div class="container">
+                <h2 id="features-heading" class="section-title animate-on-scroll">Why Choose CEMS?</h2>
+                <p class="section-subtitle animate-on-scroll">Everything you need to stay connected with campus life, all in one intuitive platform.</p>
+
+                <div class="features-grid">
+                    <!-- Feature 1 -->
+                    <div class="feature-card animate-on-scroll">
+                        <div class="feature-icon" aria-hidden="true">📅</div>
+                        <h3>Event Discovery</h3>
+                        <p>Browse through a curated list of upcoming campus events, workshops, seminars, and activities across all departments.</p>
+                    </div>
+
+                    <!-- Feature 2 -->
+                    <div class="feature-card animate-on-scroll">
+                        <div class="feature-icon" aria-hidden="true">✍️</div>
+                        <h3>Easy Registration</h3>
+                        <p>Register for events in seconds with our streamlined form. Receive instant confirmation and reminders before the event.</p>
+                    </div>
+
+                    <!-- Feature 3 -->
+                    <div class="feature-card animate-on-scroll">
+                        <div class="feature-icon" aria-hidden="true">📊</div>
+                        <h3>Real-Time Dashboard</h3>
+                        <p>Administrators can monitor registrations, manage events, and track attendance through an intuitive analytics dashboard.</p>
+                    </div>
+
+                    <!-- Feature 4 -->
+                    <div class="feature-card animate-on-scroll">
+                        <div class="feature-icon" aria-hidden="true">♿</div>
+                        <h3>Fully Accessible</h3>
+                        <p>Built with accessibility in mind. Adjustable fonts, dark mode, screen reader support, and keyboard navigation for everyone.</p>
+                    </div>
+
+                    <!-- Feature 5 -->
+                    <div class="feature-card animate-on-scroll">
+                        <div class="feature-icon" aria-hidden="true">📱</div>
+                        <h3>Mobile Friendly</h3>
+                        <p>Access CEMS from any device. Our responsive design ensures a seamless experience on desktop, tablet, and mobile.</p>
+                    </div>
+
+                    <!-- Feature 6 -->
+                    <div class="feature-card animate-on-scroll">
+                        <div class="feature-icon" aria-hidden="true">🔔</div>
+                        <h3>Instant Notifications</h3>
+                        <p>Stay updated with event reminders, registration confirmations, and important announcements delivered in real-time.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Upcoming Events Preview -->
+        <section class="section" style="background: var(--bg-primary);" aria-labelledby="upcoming-heading">
+            <div class="container">
+                <h2 id="upcoming-heading" class="section-title animate-on-scroll">Upcoming Events</h2>
+                <p class="section-subtitle animate-on-scroll">Don't miss out on these exciting events happening soon on campus.</p>
+
+                <div class="events-grid">
+                    <!-- Event Card 1 -->
+                    <div class="event-card animate-on-scroll">
+                        <div class="event-card-image" aria-hidden="true">
+                            <span class="event-card-badge upcoming">Upcoming</span>
+                            🎤
+                        </div>
+                        <div class="event-card-body">
+                            <div class="event-card-date">📅 March 15, 2026 • 10:00 AM</div>
+                            <h3 class="event-card-title">Annual Tech Summit 2026</h3>
+                            <p class="event-card-description">Join industry leaders and academics for a day of cutting-edge tech talks, workshops, and networking opportunities.</p>
+                            <div class="event-card-meta">
+                                <div class="event-card-location">📍 Main Auditorium</div>
+                                <div class="event-card-seats"><strong>120</strong> seats left</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Event Card 2 -->
+                    <div class="event-card animate-on-scroll">
+                        <div class="event-card-image" aria-hidden="true">
+                            <span class="event-card-badge upcoming">Upcoming</span>
+                            🎨
+                        </div>
+                        <div class="event-card-body">
+                            <div class="event-card-date">📅 April 2, 2026 • 2:00 PM</div>
+                            <h3 class="event-card-title">Student Art Exhibition</h3>
+                            <p class="event-card-description">Showcase of student artwork featuring paintings, sculptures, digital art, and multimedia installations from all departments.</p>
+                            <div class="event-card-meta">
+                                <div class="event-card-location">📍 Gallery Hall</div>
+                                <div class="event-card-seats"><strong>80</strong> seats left</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Event Card 3 -->
+                    <div class="event-card animate-on-scroll">
+                        <div class="event-card-image" aria-hidden="true">
+                            <span class="event-card-badge upcoming">Upcoming</span>
+                            ⚽
+                        </div>
+                        <div class="event-card-body">
+                            <div class="event-card-date">📅 May 10, 2026 • 9:00 AM</div>
+                            <h3 class="event-card-title">Inter-Department Sports Tournament</h3>
+                            <p class="event-card-description">Annual sports competition featuring football, basketball, cricket, and athletics across all university departments.</p>
+                            <div class="event-card-meta">
+                                <div class="event-card-location">📍 Sports Complex</div>
+                                <div class="event-card-seats"><strong>200</strong> seats left</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center" style="margin-top: var(--space-2xl);">
+                    <a href="events.html" class="btn btn-outline">View All Events →</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="stats-section" aria-label="Platform statistics">
+            <div class="container">
+                <div class="stats-grid">
+                    <div class="animate-on-scroll">
+                        <div class="stat-item-number">150+</div>
+                        <div class="stat-item-label">Events Organized</div>
+                    </div>
+                    <div class="animate-on-scroll">
+                        <div class="stat-item-number">5,000+</div>
+                        <div class="stat-item-label">Student Registrations</div>
+                    </div>
+                    <div class="animate-on-scroll">
+                        <div class="stat-item-number">30+</div>
+                        <div class="stat-item-label">Departments Active</div>
+                    </div>
+                    <div class="animate-on-scroll">
+                        <div class="stat-item-number">98%</div>
+                        <div class="stat-item-label">Satisfaction Rate</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="section" aria-labelledby="cta-heading">
+            <div class="container text-center">
+                <h2 id="cta-heading" class="section-title animate-on-scroll">Ready to Get Started?</h2>
+                <p class="section-subtitle animate-on-scroll">Join thousands of students already using CEMS to stay connected with campus life.</p>
+                <div class="animate-on-scroll" style="display: flex; gap: var(--space-md); justify-content: center; flex-wrap: wrap;">
+                    <a href="register.html" class="btn btn-primary btn-lg">Create Account</a>
+                    <a href="contact.html" class="btn btn-outline btn-lg">Contact Us</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ============================================================
+         FOOTER
+         ============================================================ -->
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer-grid">
+                <!-- Brand Column -->
+                <div class="footer-brand">
+                    <a href="index.html" class="logo" style="color: #fff;">
+                        <div class="logo-icon" aria-hidden="true">C</div>
+                        <span>CEMS</span>
+                    </a>
+                    <p>Your one-stop campus event management platform. Discover, register, and stay connected with everything happening at your university.</p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="Facebook">📘</a>
+                        <a href="#" aria-label="Twitter">🐦</a>
+                        <a href="#" aria-label="Instagram">📷</a>
+                        <a href="#" aria-label="LinkedIn">💼</a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="events.html">Events</a></li>
+                        <li><a href="register.html">Register</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Events -->
+                <div class="footer-col">
+                    <h4>Events</h4>
+                    <ul>
+                        <li><a href="events.html">All Events</a></li>
+                        <li><a href="#">Workshops</a></li>
+                        <li><a href="#">Seminars</a></li>
+                        <li><a href="#">Sports</a></li>
+                        <li><a href="#">Cultural</a></li>
+                    </ul>
+                </div>
+
+                <!-- Support -->
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="contact.html">Help Center</a></li>
+                        <li><a href="#">FAQs</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="admin.html">Admin Portal</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Footer Bottom -->
+            <div class="footer-bottom">
+                <p>&copy; 2026 CEMS - Campus Event Management System. All rights reserved.</p>
+                <div class="footer-bottom-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Accessibility</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- Google Translate Script -->
+    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <!-- JavaScript Files -->
+    <script src="js/accessibility.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

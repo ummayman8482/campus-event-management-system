@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Contact the CEMS team for support, inquiries, or feedback about the Campus Event Management System.">
+    <title>Contact Us - CEMS</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <div class="mobile-overlay" id="mobileOverlay" aria-hidden="true"></div>
+
+    <!-- Header -->
+    <header class="header" role="banner">
+        <div class="container">
+            <a href="index.html" class="logo" aria-label="CEMS Home">
+                <div class="logo-icon" aria-hidden="true">C</div>
+                <span>CEMS</span>
+            </a>
+            <nav class="nav-menu" id="navMenu" role="navigation" aria-label="Main navigation">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="events.html" class="nav-link">Events</a>
+                <a href="register.html" class="nav-link">Register</a>
+                <a href="contact.html" class="nav-link active" aria-current="page">Contact</a>
+                <a href="admin.html" class="nav-link">Admin</a>
+            </nav>
+            <div class="header-actions">
+                <div class="font-size-controls" role="group" aria-label="Font size controls">
+                    <button class="a11y-btn" id="fontDecrease" aria-label="Decrease font size" title="Decrease font size (A-)">A-</button>
+                    <button class="a11y-btn" id="fontIncrease" aria-label="Increase font size" title="Increase font size (A+)">A+</button>
+                </div>
+                <button class="a11y-btn" id="themeToggle" aria-label="Toggle dark mode" aria-pressed="false" title="Toggle dark/light mode">
+                    <span class="theme-toggle-icon" aria-hidden="true">🌙</span>
+                </button>
+                <div class="voice-reader-wrapper">
+                    <button class="a11y-btn" id="voiceToggle" aria-label="Voice reader" aria-expanded="false" title="Screen reader options">🔊</button>
+                    <div class="voice-dropdown" id="voiceDropdown" role="menu" aria-label="Voice reader options">
+                        <button role="menuitem" id="voiceRead" aria-label="Read page aloud">▶ Read</button>
+                        <button role="menuitem" id="voicePause" aria-label="Pause reading">⏸ Pause</button>
+                        <button role="menuitem" id="voiceResume" aria-label="Resume reading">⏯ Resume</button>
+                        <button role="menuitem" id="voiceStop" aria-label="Stop reading">⏹ Stop</button>
+                    </div>
+                </div>
+                <div id="google_translate_element" aria-label="Language translation"></div>
+                <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content" class="main-content" role="main">
+
+        <!-- Page Header -->
+        <section class="page-header">
+            <div class="container">
+                <h1 class="page-header-title animate-on-scroll">Contact Us</h1>
+                <p class="page-header-subtitle animate-on-scroll">Have a question or need assistance? We're here to help.</p>
+                <nav class="breadcrumb" aria-label="Breadcrumb">
+                    <a href="index.html">Home</a>
+                    <span aria-hidden="true">/</span>
+                    <span class="current" aria-current="page">Contact</span>
+                </nav>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="section" aria-labelledby="contact-section-heading">
+            <div class="container">
+                <h2 id="contact-section-heading" class="sr-only">Contact Information and Form</h2>
+
+                <div class="contact-grid">
+                    <!-- Contact Info -->
+                    <div class="animate-on-scroll">
+                        <h2 style="font-size: var(--font-size-2xl); font-weight: 700; margin-bottom: var(--space-sm); color: var(--text-primary);">Get in Touch</h2>
+                        <p style="font-size: var(--font-size-sm); color: var(--text-secondary); margin-bottom: var(--space-xl); line-height: 1.7;">We'd love to hear from you. Reach out to us through any of the following channels, or fill out the contact form and we'll get back to you within 24 hours.</p>
+
+                        <div class="contact-info-list">
+                            <div class="contact-info-card">
+                                <div class="contact-info-icon" aria-hidden="true">📍</div>
+                                <div>
+                                    <h3>Visit Us</h3>
+                                    <p>Administration Building, Room 204<br>Main Campus, University Drive</p>
+                                </div>
+                            </div>
+                            <div class="contact-info-card">
+                                <div class="contact-info-icon" aria-hidden="true">📞</div>
+                                <div>
+                                    <h3>Call Us</h3>
+                                    <p>+1 (555) 123-4567<br>Mon - Fri, 8:00 AM - 5:00 PM</p>
+                                </div>
+                            </div>
+                            <div class="contact-info-card">
+                                <div class="contact-info-icon" aria-hidden="true">✉️</div>
+                                <div>
+                                    <h3>Email Us</h3>
+                                    <p>cems@university.edu<br>support@cems.university.edu</p>
+                                </div>
+                            </div>
+                            <div class="contact-info-card">
+                                <div class="contact-info-icon" aria-hidden="true">💬</div>
+                                <div>
+                                    <h3>Live Chat</h3>
+                                    <p>Available during office hours<br>Average response time: 5 minutes</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Map Placeholder -->
+                        <div class="map-container" role="img" aria-label="University campus map location">
+                            📍 Campus Map
+                        </div>
+                    </div>
+
+                    <!-- Contact Form -->
+                    <div class="contact-form-card animate-on-scroll">
+                        <h2>Send Us a Message</h2>
+                        <p>Fill out the form below and we'll respond within 24 hours.</p>
+
+                        <form id="contactForm" novalidate>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label" for="contactName">Full Name <span class="required" aria-label="required">*</span></label>
+                                    <input type="text" class="form-input" id="contactName" name="name" placeholder="Your full name" required aria-required="true">
+                                    <div class="form-error" id="contactNameError">Please enter your full name.</div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="contactEmail">Email Address <span class="required" aria-label="required">*</span></label>
+                                    <input type="email" class="form-input" id="contactEmail" name="email" placeholder="your.email@university.edu" required aria-required="true">
+                                    <div class="form-error" id="contactEmailError">Please enter a valid email address.</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="contactSubject">Subject <span class="required" aria-label="required">*</span></label>
+                                <select class="form-select" id="contactSubject" name="subject" required aria-required="true">
+                                    <option value="">Select a subject</option>
+                                    <option value="general">General Inquiry</option>
+                                    <option value="registration">Registration Help</option>
+                                    <option value="event">Event Information</option>
+                                    <option value="technical">Technical Support</option>
+                                    <option value="feedback">Feedback & Suggestions</option>
+                                    <option value="partnership">Partnership Opportunities</option>
+                                    <option value="other">Other</option>
+                                </select>
+                                <div class="form-error" id="contactSubjectError">Please select a subject.</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="contactMessage">Message <span class="required" aria-label="required">*</span></label>
+                                <textarea class="form-textarea" id="contactMessage" name="message" placeholder="Tell us how we can help you..." rows="5" required aria-required="true"></textarea>
+                                <div class="form-error" id="contactMessageError">Please enter your message.</div>
+                                <div class="form-hint">Minimum 20 characters.</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-check">
+                                    <input type="checkbox" id="contactNewsletter" name="newsletter">
+                                    <span class="form-check-label">Subscribe to our newsletter for event updates</span>
+                                </label>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;" id="contactSubmitBtn">
+                                Send Message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="section" style="background: var(--bg-primary);" aria-labelledby="faq-heading">
+            <div class="container">
+                <h2 id="faq-heading" class="section-title animate-on-scroll">Frequently Asked Questions</h2>
+                <p class="section-subtitle animate-on-scroll">Quick answers to common questions.</p>
+
+                <div style="max-width: 700px; margin: 0 auto;">
+                    <div class="card animate-on-scroll" style="margin-bottom: var(--space-md);">
+                        <h3 style="font-size: var(--font-size-md); font-weight: 700; margin-bottom: var(--space-sm); color: var(--text-primary);">How do I register for an event?</h3>
+                        <p style="font-size: var(--font-size-sm); color: var(--text-secondary); line-height: 1.7;">Simply navigate to the Events page, find an event you're interested in, and click "Register Now." You'll be taken to the registration form where you can fill in your details.</p>
+                    </div>
+                    <div class="card animate-on-scroll" style="margin-bottom: var(--space-md);">
+                        <h3 style="font-size: var(--font-size-md); font-weight: 700; margin-bottom: var(--space-sm); color: var(--text-primary);">Can I cancel my registration?</h3>
+                        <p style="font-size: var(--font-size-sm); color: var(--text-secondary); line-height: 1.7;">Yes, you can cancel your registration up to 48 hours before the event. After that, cancellations may not be possible depending on event capacity.</p>
+                    </div>
+                    <div class="card animate-on-scroll" style="margin-bottom: var(--space-md);">
+                        <h3 style="font-size: var(--font-size-md); font-weight: 700; margin-bottom: var(--space-sm); color: var(--text-primary);">Is CEMS free to use?</h3>
+                        <p style="font-size: var(--font-size-sm); color: var(--text-secondary); line-height: 1.7;">Absolutely! CEMS is completely free for all students, faculty, and staff. Some events may have their own fees, but the platform itself is free.</p>
+                    </div>
+                    <div class="card animate-on-scroll">
+                        <h3 style="font-size: var(--font-size-md); font-weight: 700; margin-bottom: var(--space-sm); color: var(--text-primary);">How do I become an event organizer?</h3>
+                        <p style="font-size: var(--font-size-sm); color: var(--text-secondary); line-height: 1.7;">Contact our admin team through this form or email cems@university.edu. We'll guide you through the process of becoming a verified event organizer on the platform.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo" style="color: #fff;">
+                        <div class="logo-icon" aria-hidden="true">C</div>
+                        <span>CEMS</span>
+                    </a>
+                    <p>Your one-stop campus event management platform.</p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="Facebook">📘</a>
+                        <a href="#" aria-label="Twitter">🐦</a>
+                        <a href="#" aria-label="Instagram">📷</a>
+                        <a href="#" aria-label="LinkedIn">💼</a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="events.html">Events</a></li>
+                        <li><a href="register.html">Register</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Events</h4>
+                    <ul>
+                        <li><a href="events.html">All Events</a></li>
+                        <li><a href="#">Workshops</a></li>
+                        <li><a href="#">Seminars</a></li>
+                        <li><a href="#">Sports</a></li>
+                        <li><a href="#">Cultural</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="contact.html">Help Center</a></li>
+                        <li><a href="#">FAQs</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="admin.html">Admin Portal</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 CEMS - Campus Event Management System. All rights reserved.</p>
+                <div class="footer-bottom-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Accessibility</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+
+    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script src="js/accessibility.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

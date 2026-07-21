@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Admin Dashboard for managing campus events, registrations, and contact submissions.">
+    <title>Admin Dashboard - CEMS</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <div class="mobile-overlay" id="mobileOverlay" aria-hidden="true"></div>
+
+    <!-- Header -->
+    <header class="header" role="banner">
+        <div class="container">
+            <a href="index.html" class="logo" aria-label="CEMS Home">
+                <div class="logo-icon" aria-hidden="true">C</div>
+                <span>CEMS</span>
+            </a>
+            <nav class="nav-menu" id="navMenu" role="navigation" aria-label="Main navigation">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="events.html" class="nav-link">Events</a>
+                <a href="register.html" class="nav-link">Register</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+                <a href="admin.html" class="nav-link active" aria-current="page">Admin</a>
+            </nav>
+            <div class="header-actions">
+                <div class="font-size-controls" role="group" aria-label="Font size controls">
+                    <button class="a11y-btn" id="fontDecrease" aria-label="Decrease font size" title="Decrease font size (A-)">A-</button>
+                    <button class="a11y-btn" id="fontIncrease" aria-label="Increase font size" title="Increase font size (A+)">A+</button>
+                </div>
+                <button class="a11y-btn" id="themeToggle" aria-label="Toggle dark mode" aria-pressed="false" title="Toggle dark/light mode">
+                    <span class="theme-toggle-icon" aria-hidden="true">🌙</span>
+                </button>
+                <div class="voice-reader-wrapper">
+                    <button class="a11y-btn" id="voiceToggle" aria-label="Voice reader" aria-expanded="false" title="Screen reader options">🔊</button>
+                    <div class="voice-dropdown" id="voiceDropdown" role="menu" aria-label="Voice reader options">
+                        <button role="menuitem" id="voiceRead" aria-label="Read page aloud">▶ Read</button>
+                        <button role="menuitem" id="voicePause" aria-label="Pause reading">⏸ Pause</button>
+                        <button role="menuitem" id="voiceResume" aria-label="Resume reading">⏯ Resume</button>
+                        <button role="menuitem" id="voiceStop" aria-label="Stop reading">⏹ Stop</button>
+                    </div>
+                </div>
+                <div id="google_translate_element" aria-label="Language translation"></div>
+                <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content" class="main-content" role="main" style="margin-top: var(--nav-height);">
+
+        <div class="dashboard-layout">
+            <!-- Sidebar -->
+            <aside class="dashboard-sidebar" id="dashboardSidebar" role="complementary" aria-label="Admin sidebar navigation">
+                <div class="sidebar-section-label">Main</div>
+                <nav class="sidebar-menu" aria-label="Dashboard navigation">
+                    <a href="#overview" class="sidebar-link active" data-tab="overview" role="button" tabindex="0">
+                        <span aria-hidden="true">📊</span> Overview
+                    </a>
+                    <a href="#registrations" class="sidebar-link" data-tab="registrations" role="button" tabindex="0">
+                        <span aria-hidden="true">📝</span> Registrations
+                    </a>
+                    <a href="#messages" class="sidebar-link" data-tab="messages" role="button" tabindex="0">
+                        <span aria-hidden="true">✉️</span> Messages
+                    </a>
+                    <a href="#events-manage" class="sidebar-link" data-tab="events-manage" role="button" tabindex="0">
+                        <span aria-hidden="true">📅</span> Manage Events
+                    </a>
+                </nav>
+
+                <div class="sidebar-section-label">Settings</div>
+                <nav class="sidebar-menu">
+                    <a href="#" class="sidebar-link">
+                        <span aria-hidden="true">⚙️</span> Settings
+                    </a>
+                    <a href="index.html" class="sidebar-link">
+                        <span aria-hidden="true">🏠</span> Back to Site
+                    </a>
+                </nav>
+            </aside>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-main">
+
+                <!-- Mobile Sidebar Toggle -->
+                <button class="btn btn-outline btn-sm" id="sidebarToggle" style="display: none; margin-bottom: var(--space-lg);" aria-label="Toggle sidebar">
+                    ☰ Toggle Sidebar
+                </button>
+
+                <!-- ============================================
+                     OVERVIEW TAB
+                     ============================================ -->
+                <div class="tab-content active" id="tab-overview">
+                    <div class="dashboard-header">
+                        <div>
+                            <h1>Dashboard Overview</h1>
+                            <p>Welcome back, Admin. Here's what's happening with your events.</p>
+                        </div>
+                        <div style="font-size: var(--font-size-sm); color: var(--text-muted);">
+                            📅 <span id="currentDate"></span>
+                        </div>
+                    </div>
+
+                    <!-- Stats Cards -->
+                    <div class="dashboard-stats">
+                        <div class="dashboard-stat-card">
+                            <div class="dashboard-stat-header">
+                                <div class="dashboard-stat-icon blue" aria-hidden="true">📅</div>
+                                <span class="dashboard-stat-trend up">+12%</span>
+                            </div>
+                            <div class="dashboard-stat-value">9</div>
+                            <div class="dashboard-stat-label">Total Events</div>
+                        </div>
+                        <div class="dashboard-stat-card">
+                            <div class="dashboard-stat-header">
+                                <div class="dashboard-stat-icon green" aria-hidden="true">📝</div>
+                                <span class="dashboard-stat-trend up">+28%</span>
+                            </div>
+                            <div class="dashboard-stat-value">247</div>
+                            <div class="dashboard-stat-label">Total Registrations</div>
+                        </div>
+                        <div class="dashboard-stat-card">
+                            <div class="dashboard-stat-header">
+                                <div class="dashboard-stat-icon purple" aria-hidden="true">✉️</div>
+                                <span class="dashboard-stat-trend up">+5%</span>
+                            </div>
+                            <div class="dashboard-stat-value">38</div>
+                            <div class="dashboard-stat-label">Messages Received</div>
+                        </div>
+                        <div class="dashboard-stat-card">
+                            <div class="dashboard-stat-header">
+                                <div class="dashboard-stat-icon orange" aria-hidden="true">👥</div>
+                                <span class="dashboard-stat-trend up">+18%</span>
+                            </div>
+                            <div class="dashboard-stat-value">1,234</div>
+                            <div class="dashboard-stat-label">Active Users</div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Registrations Table -->
+                    <div class="dashboard-table-card" style="margin-bottom: var(--space-xl);">
+                        <div class="dashboard-table-header">
+                            <h2>Recent Registrations</h2>
+                            <button class="btn btn-sm btn-outline" onclick="document.querySelector('[data-tab=registrations]').click()">View All</button>
+                        </div>
+                        <table class="data-table" aria-label="Recent registrations">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Event</th>
+                                    <th scope="col">Department</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Emily Watson</strong></td>
+                                    <td>Annual Tech Summit</td>
+                                    <td>Computer Science</td>
+                                    <td>Mar 10, 2026</td>
+                                    <td><span class="status-badge confirmed">✓ Confirmed</span></td>
+                                    <td>
+                                        <div class="table-actions">
+                                            <button class="table-action-btn" aria-label="View registration details" title="View">👁</button>
+                                            <button class="table-action-btn delete" aria-label="Delete registration" title="Delete">🗑</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Marcus Johnson</strong></td>
+                                    <td>Spring Career Fair</td>
+                                    <td>Business Admin</td>
+                                    <td>Mar 9, 2026</td>
+                                    <td><span class="status-badge confirmed">✓ Confirmed</span></td>
+                                    <td>
+                                        <div class="table-actions">
+                                            <button class="table-action-btn" aria-label="View registration details" title="View">👁</button>
+                                            <button class="table-action-btn delete" aria-label="Delete registration" title="Delete">🗑</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Priya Patel</strong></td>
+                                    <td>Python Workshop</td>
+                                    <td>Computer Science</td>
+                                    <td>Mar 8, 2026</td>
+                                    <td><span class="status-badge pending">◷ Pending</span></td>
+                                    <td>
+                                        <div class="table-actions">
+                                            <button class="table-action-btn" aria-label="View registration details" title="View">👁</button>
+                                            <button class="table-action-btn delete" aria-label="Delete registration" title="Delete">🗑</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Sarah Kim</strong></td>
+                                    <td>Campus Music Night</td>
+                                    <td>Arts & Humanities</td>
+                                    <td>Mar 7, 2026</td>
+                                    <td><span class="status-badge confirmed">✓ Confirmed</span></td>
+                                    <td>
+                                        <div class="table-actions">
+                                            <button class="table-action-btn" aria-label="View registration details" title="View">👁</button>
+                                            <button class="table-action-btn delete" aria-label="Delete registration" title="Delete">🗑</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>David Chen</strong></td>
+                                    <td>24-Hour Hackathon</td>
+                                    <td>Computer Science</td>
+                                    <td>Mar 6, 2026</td>
+                                    <td><span class="status-badge cancelled">✕ Cancelled</span></td>
+                                    <td>
+                                        <div class="table-actions">
+                                            <button class="table-action-btn" aria-label="View registration details" title="View">👁</button>
+                                            <button class="table-action-btn delete" aria-label="Delete registration" title="Delete">🗑</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Recent Messages Table -->
+                    <div class="dashboard-table-card">
+                        <div class="dashboard-table-header">
+                            <h2>Recent Messages</h2>
+                            <button class="btn btn-sm btn-outline" onclick="document.querySelector('[data-tab=messages]').click()">View All</button>
+                        </div>
+                        <table class="data-table" aria-label="Recent messages">
+                            <thead>
+                                <tr>
+                                    <th scope="col">From</th>
+                                    <th scope="col">Subject</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Jessica Adams</strong></td>
+                                    <td>Registration Help</td>
+                                    <td>Mar 10, 2026</td>
+                                    <td><span class="status-badge unread">● Unread</span></td>
+                                    <td>
+                                        <div class="table-actions">
+                                            <button class="table-action-btn" aria-label="Read message" title="Read">👁</button>
+                                            <button class="table-action-btn delete" aria-label="Delete message" title="Delete">🗑</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Robert Taylor</strong></td>
+                                    <td>Event Suggestion</td>
+                                    <td>Mar 9, 2026</td>
+                                    <td><span class="status-badge read">✓ Read</span></td>
+                                    <td>
+                                        <div class="table-actions">
+                                            <button class="table-action-btn" aria-label="Read message" title="Read">👁</button>
+                                            <button class="table-action-btn delete" aria-label="Delete message" title="Delete">🗑</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Ana Rodriguez</strong></td>
+                                    <td>Technical Issue</td>
+                                    <td>Mar 8, 2026</td>
+                                    <td><span class="status-badge unread">● Unread</span></td>
+                                    <td>
+                                        <div class="table-actions">
+                                            <button class="table-action-btn" aria-label="Read message" title="Read">👁</button>
+                                            <button class="table-action-btn delete" aria-label="Delete message" title="Delete">🗑</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ============================================
+                     REGISTRATIONS TAB
+                     ============================================ -->
+                <div class="tab-content" id="tab-registrations">
+                    <div class="dashboard-header">
+                        <div>
+                            <h1>Manage Registrations</h1>
+                            <p>View, search, and manage all event registrations.</p>
+                        </div>
+                        <button class="btn btn-primary btn-sm" id="exportRegBtn">📥 Export CSV</button>
+                    </div>
+
+                    <div class="dashboard-table-card">
+                        <div class="dashboard-table-header">
+                            <h2>All Registrations (<span id="regCountDisplay">10</span>)</h2>
+                            <div class="table-search">
+                                <span class="search-icon" aria-hidden="true">🔍</span>
+                                <input type="search" id="regSearchInput" placeholder="Search registrations..." aria-label="Search registrations">
+                            </div>
+                        </div>
+                        <table class="data-table" id="registrationsTable" aria-label="All registrations">
+                            <thead>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Event</th>
+                                    <th scope="col">Department</th>
+                                    <th scope="col">Year</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>#REG-001</td>
+                                    <td><strong>Emily Watson</strong></td>
+                                    <td>emily.w@uni.edu</td>
+                                    <td>Tech Summit</td>
+                                    <td>Computer Science</td>
+                                    <td>3rd Year</td>
+                                    <td>Mar 10, 2026</td>
+                                    <td><span class="status-badge confirmed">✓ Confirmed</span></td>
+                                    <td>
+                                        <div class="table-actions">
+                                            <button class="table-action-btn" aria-label="View details" title="View">👁</button>
+                                            <button class="table-action-btn" aria-label="Edit registration" title="Edit">✏️</button>
+                                            <button class="table-action-btn delete" aria-label="Delete" title="Delete">🗑</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#REG-002</td>
+                                    <td><strong>Marcus Johnson</strong></td>
+                                    <td>marcus.j@uni.edu</td>
+                                    <td>Career Fair</td>
+                                    <td>Business Admin</td>
+                                    <td>4th Year</td>
+                                    <td>Mar 9, 2026</td>
+                                    <td><span class="status-badge confirmed">✓ Confirmed</span></td>
+                                    <td>
+                                        <div class="table-actions">
+                                            <button class="table-action-btn" aria-label="View details" title="View">👁</button>
+                                            <button class="table-action-btn" aria-label="Edit registration" title="Edit">✏️</button>
+                                            <button class="table-action-btn delete" aria-label="Delete" title="Delete">🗑</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#REG-003</td>
+                                    <td><strong>Priya Patel</strong></td>
+                                    <td>priya.p@uni.edu</td>
+                                    <td>Python Workshop</td>
+                                    <td>Computer Science</td>
+                                    <td>2nd Year</td>
+                                    <td>Mar 8, 2026</td>
+                                    <td><span class="status-badge pending">◷ Pending</span></td>
+                                    <td>
+                                        <div class="table-actions">
+                                            <button class="table-action-btn" aria-label="View details" title="View">👁</button>
+                                            <button class="table-action-btn" aria-label="Edit registration" title="Edit">✏️</button>
+                                            <button class="table-action-btn delete" aria-label="Delete" title="Delete">🗑</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#REG-004</td>
+                                    <td><strong>Sarah Kim</strong></td>
+                                    <td>sarah.k@uni.edu</td>
+                                    <td>Music Night</td>
+                                    <td>Arts & Humanities</td>
+                                    <td>1st Year</td>
+                                    <td>Mar 7, 2026</td>
+                                    <td><span class="status-badge confirmed">✓ Confirmed</span></td>
+                                    <td>
+                                        <div class="table-actions">
+                                            <button class="table-action-btn" aria-label="View details" title="View">👁</button>
+                                            <button class="table-action-btn" aria-label="Edit registration" title="Edit">✏️</button>
+                                            <button class="table-action-btn delete" aria-label="Delete" title="Delete">🗑</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#REG-005</td>
+                                    <td><strong>David Chen</strong></td>
+                                    <td>david.c@uni.edu</td>
+                                    <td>Hackathon</td>
+                                    <td>Computer Science</td>
+                                    <td>3rd Year</td>
+                                    <td>Mar 6, 2026</td>
+                                    <td><span class="status-badge cancelled">✕ Cancelled</span></td>
+                                    <td>
+                                        <div class="table-actions">
+                                            <button class="table-action-btn" aria-label="View details" title="View">👁</button>
+                                            <button class="table-action-btn" aria-label="Edit registration" title="Edit">✏️</button>
+                                            <button class="table-action-btn delete" aria-label="Delete" title="Delete">🗑</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#REG-006</td>
+                                    <td><strong>Lisa Thompson</strong></td>
+                                    <td>lisa.t@uni.edu</td>
+                                    <td>Art Exhibition</td>
+                                    <td>Arts & Humanities</td>
+                                    <td>2nd Year</td>
+                                    <td>Mar 5, 2026</td>
+                                    <td><span class="status-badge confirmed">✓ Confirmed</span></td>
+                                    <td>
+                                        <div class="table-actions">
+                                            <button class="table-action-btn" aria-label="View details" title="View">👁</button>
+                                            <button class="table-action-btn" aria-label="Edit registration" title="Edit">✏️</button>
+                                            <button class="table-action-btn delete" aria-label="Delete" title="Delete">🗑</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#REG-007</td>
+                                    <td><strong>Omar Hassan</strong></td>
+                                    <td>omar.h@uni.edu</td>
+                                    <td>Sports Tournament</td>
+                                    <td>Engineering</td>
+                                    <td>4th Year</td>
+                                    <td>Mar 4, 2026</td>
+                                    <td><span class="status-badge confirmed">✓ Confirmed</span></td>
+                                    <td>
+                                        <div class="table-actions">
+                                            <button class="table-action-btn" aria-label="View details" title="View">👁</button>
+                                            <button class="table-action-btn" aria-label="Edit registration" title="Edit">✏️</button>
+                                            <button class="table-action-btn delete" aria-label="Delete" title="Delete">🗑</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#REG-008</td>
+                                    <td><strong>Maria Garcia</strong></td>
+                                    <td>maria.g@uni.edu</td>
+                                    <td>Yoga Workshop</td>
+                                    <td>Medicine</td>
+                                    <td>PG</td>
+                                    <td>Mar 3, 2026</td>
+                                    <td><span class="status-badge pending">◷ Pending</span></td>
+                                    <td>
+                                        <div class="table-actions">
+                                            <button class="table-action-btn" aria-label="View details" title="View">👁</button>
+                                            <button class="table-action-btn" aria-label="Edit registration" title="Edit">✏️</button>
+                                            <button class="table-action-btn delete" aria-label="Delete" title="Delete">🗑</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#REG-009</td>
+                                    <td><strong>James Wilson</strong></td>
+                                    <td>james.w@uni.edu</td>
+                                    <td>Tech Summit</td>
+                                    <td>Engineering</td>
+                                    <td>3rd Year</td>
+                                    <td>Mar 2, 2026</td>
+                                    <td><span class="status-badge confirmed">✓ Confirmed</span></td>
+                                    <td>
+                                        <div class="table-actions">
+                                            <button class="table-action-btn" aria-label="View details" title="View">👁</button>
+                                            <button class="table-action-btn" aria-label="Edit registration" title="Edit">✏️</button>
+                                            <button class="table-action-btn delete" aria-label="Delete" title="Delete">🗑</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#REG-010</td>
+                                    <td><strong>Nina Kowalski</strong></td>
+                                    <td>nina.k@uni.edu</td>
+                                    <td>Career Fair</td>
+                                    <td>Business Admin</td>
+                                    <td>4th Year</td>
+                                    <td>Mar 1, 2026</td>
+                                    <td><span class="status-badge confirmed">✓ Confirmed</span></td>
+                                    <td>
+                                        <div class="table-actions">
+                                            <button class="table-action-btn" aria-label="View details" title="View">👁</button>
+                                            <button class="table-action-btn" aria-label="Edit registration" title="Edit">✏️</button>
+                                            <button class="table-action-btn delete" aria-label="Delete" title="Delete">🗑</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ============================================
+                     MESSAGES TAB
+                     ============================================ -->
+                <div class="tab-content" id="tab-messages">
+                    <div class="dashboard-header">
+                        <div>
+                            <h1>Contact Messages</h1>
+                            <p>View and manage all messages submitted through the contact form.</p>
+                        </div>
+                        <button class="btn btn-primary btn-sm" id="exportMsgBtn">📥 Export CSV</button>
+                    </div>
+
+                    <div class="dashboard-table-card">
+                        <div class="dashboard-table-header">
+                            <h2>All Messages (<span id="msgCountDisplay">8</span>)</h2>
+                            <div class="table-search">
+                                <span class="search-icon" aria-hidden="true">🔍</span>
+                                <input type="search" id="msgSearchInput" placeholder="Search messages..." aria-label="Search messages">
+                            </div>
+                        </div>
+                        <table class="data-table" id="messagesTable" aria-label="All messages">
+                            <thead>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">From</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Subject</th>
+                                    <th scope="col">Message</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>#MSG-001</td>
+                                    <td><strong>Jessica Adams</strong></td>
+                                    <td>jessica.a@uni.edu</td>
+                                    <td>Registration Help</td>
+                                    <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">I'm having trouble registering for the Tech Summit. The form keeps giving me an error...</td>
+                                    <td>Mar 10, 2026</td>
+                                    <td><span class="status-badge unread">● Unread</span></td>
+                                    <td>
+                                        <div class="table-actions">
+                                            <button class="table-action-btn" aria-label="Read message" title="Read">👁</button>
+                                            <button class="table-action-btn" aria-label="Reply to message" title="Reply">↩</button>
+                                            <button class="table-action-btn delete" aria-label="Delete message" title="Delete">🗑</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#MSG-002</td>
+                                    <td><strong>Robert Taylor</strong></td>
+                                    <td>robert.t@uni.edu</td>
+                                    <td>Event Suggestion</td>
+                                    <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">I'd like to suggest organizing a debate competition event. Many students are interested...</td>
+                                    <td>Mar 9, 2026</td>
+                                    <td><span class="status-badge read">✓ Read</span></td>
+                                    <td>
+                                        <div class="table-actions">
+                                            <button class="table-action-btn" aria-label="Read message" title="Read">👁</button>
+                                            <button class="table-action-btn" aria-label="Reply to message" title="Reply">↩</button>
+                                            <button class="table-action-btn delete" aria-label="Delete message" title="Delete">🗑</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#MSG-003</td>
+                                    <td><strong>Ana Rodriguez</strong></td>
+                                    <td>ana.r@uni.edu</td>
+                                    <td>Technical Issue</td>
+                                    <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">The dark mode toggle doesn't seem to persist when I navigate to another page...</td>
+                                    <td>Mar 8, 2026</td>
+                                    <td><span class="status-badge unread">● Unread</span></td>
+                                    <td>
+                                        <div class="table-actions">
+                                            <button class="table-action-btn" aria-label="Read message" title="Read">👁</button>
+                                            <button class="table-action-btn" aria-label="Reply to message" title="Reply">↩</button>
+                                            <button class="table-action-btn delete" aria-label="Delete message" title="Delete">🗑</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#MSG-004</td>
+                                    <td><strong>Kevin Lee</strong></td>
+                                    <td>kevin.l@uni.edu</td>
+                                    <td>General Inquiry</td>
+                                    <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">When will the registration for the sports tournament open? I want to register my team...</td>
+                                    <td>Mar 7, 2026</td>
+                                    <td><span class="status-badge read">✓ Read</span></td>
+                                    <td>
+                                        <div class="table-actions">
+                                            <button class="table-action-btn" aria-label="Read message" title="Read">👁</button>
+                                            <button class="table-action-btn" aria-label="Reply to message" title="Reply">↩</button>
+                                            <button class="table-action-btn delete" aria-label="Delete message" title="Delete">🗑</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#MSG-005</td>
+                                    <td><strong>Michelle Brown</strong></td>
+                                    <td>michelle.b@uni.edu</td>
+                                    <td>Feedback</td>
+                                    <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Great platform! I love how easy it is to register for events. The dark mode is fantastic...</td>
+                                    <td>Mar 6, 2026</td>
+                                    <td><span class="status-badge read">✓ Read</span></td>
+                                    <td>
+                                        <div class="table-actions">
+                                            <button class="table-action-btn" aria-label="Read message" title="Read">👁</button>
+                                            <button class="table-action-btn" aria-label="Reply to message" title="Reply">↩</button>
+                                            <button class="table-action-btn delete" aria-label="Delete message" title="Delete">🗑</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#MSG-006</td>
+                                    <td><strong>Chris Anderson</strong></td>
+                                    <td>chris.a@uni.edu</td>
+                                    <td>Partnership</td>
+                                    <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Our company would like to sponsor events on the platform. Who should we contact...</td>
+                                    <td>Mar 5, 2026</td>
+                                    <td><span class="status-badge unread">● Unread</span></td>
+                                    <td>
+                                        <div class="table-actions">
+                                            <button class="table-action-btn" aria-label="Read message" title="Read">👁</button>
+                                            <button class="table-action-btn" aria-label="Reply to message" title="Reply">↩</button>
+                                            <button class="table-action-btn delete" aria-label="Delete message" title="Delete">🗑</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#MSG-007</td>
+                                    <td><strong>Rachel Green</strong></td>
+                                    <td>rachel.g@uni.edu</td>
+                                    <td>Event Information</td>
+                                    <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Will the Tech Summit have virtual attendance options for students who can't make it...</td>
+                                    <td>Mar 4, 2026</td>
+                                    <td><span class="status-badge read">✓ Read</span></td>
+                                    <td>
+                                        <div class="table-actions">
+                                            <button class="table-action-btn" aria-label="Read message" title="Read">👁</button>
+                                            <button class="table-action-btn" aria-label="Reply to message" title="Reply">↩</button>
+                                            <button class="table-action-btn delete" aria-label="Delete message" title="Delete">🗑</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#MSG-008</td>
+                                    <td><strong>Tom Harris</strong></td>
+                                    <td>tom.h@uni.edu</td>
+                                    <td>Technical Support</td>
+                                    <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">I can't seem to upload my profile picture on the registration form. It keeps timing...</td>
+                                    <td>Mar 3, 2026</td>
+                                    <td><span class="status-badge unread">● Unread</span></td>
+                                    <td>
+                                        <div class="table-actions">
+                                            <button class="table-action-btn" aria-label="Read message" title="Read">👁</button>
+                                            <button class="table-action-btn" aria-label="Reply to message" title="Reply">↩</button>
+                                            <button class="table-action-btn delete" aria-label="Delete message" title="Delete">🗑</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ============================================
+                     MANAGE EVENTS TAB
+                     ============================================ -->
+                <div class="tab-content" id="tab-events-manage">
+                    <div class="dashboard-header">
+                        <div>
+                            <h1>Manage Events</h1>
+                            <p>Create, edit, and manage all campus events.</p>
+                        </div>
+                        <button class="btn btn-primary btn-sm" id="addEventBtn">+ Add New Event</button>
+                    </div>
+
+                    <div class="dashboard-table-card">
+                        <div class="dashboard-table-header">
+                            <h2>All Events (<span id="eventCountDisplay">9</span>)</h2>
+                            <div class="table-search">
+                                <span class="search-icon" aria-hidden="true">🔍</span>
+                                <input type="search" id="eventSearchInput" placeholder="Search events..." aria-label="Search events">
+                            </div>
+                        </div>
+                        <table class="data-table" id="eventsManageTable" aria-label="All events">
+                            <thead>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Event Name</th>
+                                    <th scope="col">Category</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Location</th>
+                                    <th scope="col">Capacity</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>#EVT-001</td>
+                                    <td><strong>Annual Tech Summit 2026</strong></td>
+                                    <td>Academic</td>
+                                    <td>Mar 15, 2026</td>
+                                    <td>Main Auditorium</td>
+                                    <td>300</td>
+                                    <td><span class="status-badge confirmed">Active</span></td>
+                                    <td>
+                                        <div class="table-actions">
+                                            <button class="table-action-btn" aria-label="View event" title="View">👁</button>
+                                            <button class="table-action-btn" aria-label="Edit event" title="Edit">✏️</button>
+                                            <button class="table-action-btn delete" aria-label="Delete event" title="Delete">🗑</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#EVT-002</td>
+                                    <td><strong>Student Art Exhibition</strong></td>
+                                    <td>Cultural</td>
+                                    <td>Apr 2, 2026</td>
+                                    <td>Gallery Hall</td>
+                                    <td>150</td>
+                                    <td><span class="status-badge confirmed">Active</span></td>
+                                    <td>
+                                        <div class="table-actions">
+                                            <button class="table-action-btn" aria-label="View event" title="View">👁</button>
+                                            <button class="table-action-btn" aria-label="Edit event" title="Edit">✏️</button>
+                                            <button class="table-action-btn delete" aria-label="Delete event" title="Delete">🗑</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#EVT-003</td>
+                                    <td><strong>Inter-Dept Sports Tournament</strong></td>
+                                    <td>Sports</td>
+                                    <td>May 10, 2026</td>
+                                    <td>Sports Complex</td>
+                                    <td>500</td>
+                                    <td><span class="status-badge confirmed">Active</span></td>
+                                    <td>
+                                        <div class="table-actions">
+                                            <button class="table-action-btn" aria-label="View event" title="View">👁</button>
+                                            <button class="table-action-btn" aria-label="Edit event" title="Edit">✏️</button>
+                                            <button class="table-action-btn delete" aria-label="Delete event" title="Delete">🗑</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#EVT-004</td>
+                                    <td><strong>Spring Career Fair</strong></td>
+                                    <td>Academic</td>
+                                    <td>Mar 28, 2026</td>
+                                    <td>Convention Center</td>
+                                    <td>400</td>
+                                    <td><span class="status-badge confirmed">Active</span></td>
+                                    <td>
+                                        <div class="table-actions">
+                                            <button class="table-action-btn" aria-label="View event" title="View">👁</button>
+                                            <button class="table-action-btn" aria-label="Edit event" title="Edit">✏️</button>
+                                            <button class="table-action-btn delete" aria-label="Delete event" title="Delete">🗑</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#EVT-005</td>
+                                    <td><strong>Python Workshop</strong></td>
+                                    <td>Workshop</td>
+                                    <td>Feb-Mar 2026</td>
+                                    <td>Computer Lab 3</td>
+                                    <td>30</td>
+                                    <td><span class="status-badge pending">Ongoing</span></td>
+                                    <td>
+                                        <div class="table-actions">
+                                            <button class="table-action-btn" aria-label="View event" title="View">👁</button>
+                                            <button class="table-action-btn" aria-label="Edit event" title="Edit">✏️</button>
+                                            <button class="table-action-btn delete" aria-label="Delete event" title="Delete">🗑</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#EVT-006</td>
+                                    <td><strong>Campus Music Night</strong></td>
+                                    <td>Cultural</td>
+                                    <td>Apr 20, 2026</td>
+                                    <td>Open Air Theatre</td>
+                                    <td>600</td>
+                                    <td><span class="status-badge confirmed">Active</span></td>
+                                    <td>
+                                        <div class="table-actions">
+                                            <button class="table-action-btn" aria-label="View event" title="View">👁</button>
+                                            <button class="table-action-btn" aria-label="Edit event" title="Edit">✏️</button>
+                                            <button class="table-action-btn delete" aria-label="Delete event" title="Delete">🗑</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#EVT-007</td>
+                                    <td><strong>24-Hour Hackathon</strong></td>
+                                    <td>Academic</td>
+                                    <td>May 5, 2026</td>
+                                    <td>Innovation Hub</td>
+                                    <td>100</td>
+                                    <td><span class="status-badge confirmed">Active</span></td>
+                                    <td>
+                                        <div class="table-actions">
+                                            <button class="table-action-btn" aria-label="View event" title="View">👁</button>
+                                            <button class="table-action-btn" aria-label="Edit event" title="Edit">✏️</button>
+                                            <button class="table-action-btn delete" aria-label="Delete event" title="Delete">🗑</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#EVT-008</td>
+                                    <td><strong>Yoga Workshop</strong></td>
+                                    <td>Workshop</td>
+                                    <td>Mar 22, 2026</td>
+                                    <td>Wellness Center</td>
+                                    <td>50</td>
+                                    <td><span class="status-badge confirmed">Active</span></td>
+                                    <td>
+                                        <div class="table-actions">
+                                            <button class="table-action-btn" aria-label="View event" title="View">👁</button>
+                                            <button class="table-action-btn" aria-label="Edit event" title="Edit">✏️</button>
+                                            <button class="table-action-btn delete" aria-label="Delete event" title="Delete">🗑</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#EVT-009</td>
+                                    <td><strong>Annual Science Fair</strong></td>
+                                    <td>Academic</td>
+                                    <td>Jan 20, 2026</td>
+                                    <td>Science Block</td>
+                                    <td>200</td>
+                                    <td><span class="status-badge cancelled">Past</span></td>
+                                    <td>
+                                        <div class="table-actions">
+                                            <button class="table-action-btn" aria-label="View event" title="View">👁</button>
+                                            <button class="table-action-btn" aria-label="Edit event" title="Edit">✏️</button>
+                                            <button class="table-action-btn delete" aria-label="Delete event" title="Delete">🗑</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div><!-- end dashboard-main -->
+        </div><!-- end dashboard-layout -->
+    </main>
+
+    <!-- Modal for viewing details -->
+    <div class="modal-overlay" id="detailModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modalTitle">Detail View</h2>
+                <button class="modal-close" id="modalClose" aria-label="Close modal">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <p style="color: var(--text-secondary);">Details will be displayed here.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline btn-sm" id="modalCloseBtn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer (minimal for admin) -->
+    <footer class="footer" role="contentinfo" style="padding: var(--space-lg) 0;">
+        <div class="container">
+            <div class="footer-bottom" style="border-top: none; padding-top: 0;">
+                <p>&copy; 2026 CEMS - Admin Dashboard. All rights reserved.</p>
+                <div class="footer-bottom-links">
+                    <a href="index.html">Back to Site</a>
+                    <a href="#">Help</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+
+    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script src="js/accessibility.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
