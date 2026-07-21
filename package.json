@@ -1,0 +1,14 @@
+{
+  "name": "cems-campus-event-management-system",
+  "version": "1.0.0",
+  "description": "Campus Event Management System - HCI Project",
+  "scripts": {
+    "start": "npx serve -s . -l 10000",
+    "build": "echo 'Static site - no build needed'"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": ["campus", "events", "management", "firebase"],
+  "license": "MIT"
+}
